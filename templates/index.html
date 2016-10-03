@@ -86,46 +86,6 @@
 	<script src="../js/Directives/post.js"></script>
 	<script src="../js/Directives/account.js"></script>
 
-	<!-- Jasmine -->
-	<link rel="shortcut icon" type="image/png" href="../jasmine/lib/jasmine-2.5.2/jasmine_favicon.png">
-<link rel="stylesheet" type="text/css" href="../jasmine/lib/jasmine-2.5.2/jasmine.css">
-
-<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine.js"></script>
-<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine-html.js"></script>
-<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/boot.js"></script>
-	<script src="//code.angularjs.org/1.0.6/angular-mocks.js"></script>
-	<script type="text/javascript">
-	
-describe("AccountDirective", function () {
-	var compile, scope, directiveElem;
-
-	beforeEach(function(){
-		module('MidiaApp');
-		inject(function($compile, $rootScope){
-		    compile = $compile;
-		    scope = $rootScope.$new();
-		    scope.config = {
-		      name: 'bob'
-		    };
-  		});
-  		directiveElem = getCompiledElement();
-	});
-
-	function getCompiledElement(){
-	  var compiledDirective = compile(angular.element('<account info="config" "></account>'))(scope);
-	  scope.$digest();
-	  return compiledDirective;
-	}
-
-	it('notify on isolated scope should be one-way bound', function(){
-	  var isolatedScope = directiveElem.isolateScope();
-
-	  expect(isolatedScope.accountInfo.name).toEqual('bob');
-	});
-});
-
-
-	</script>
 
 </body>
 </html>
