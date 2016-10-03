@@ -1,8 +1,18 @@
 app.controller('MainController', ['$scope', function($scope) {
 
-	$scope.postOne = {
+	$scope.posts = [
+		{
 		img: '../img/test.png',
 		text: 'facebook text'
+		},
+		{
+		img: '../img/test.png',
+		text: 'facebook2 text'
+		}
+	];
+
+	$scope.accountOne = {
+		name: 'bob'
 	};
 
 }]);

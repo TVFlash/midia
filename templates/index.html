@@ -34,15 +34,22 @@
 <body ng-app="MidiaApp">
 
 <!-- Our Website Content Goes Here -->
-	<h2 class="text-info">Midia</h2>
-
-	<p class="text-lowercase">Midia</p>
+	<h2 class="text-center">Midia</h2>
 
 	<div class="main" ng-controller="MainController">
-	      
-	          <post info="postOne">
+		
+	    <div class="container-fluid">
+		    <div class="row">
+				<account info="accountOne">
+				</account>
+			</div>
+
+	    	<div class="card" ng-repeat="post in posts">
+	          <post info="post">
 	          </post>
-	     
+	         </div>
+	    </div>
+
 	</div>
 
 	<!-- Our Website Javascripts -->
@@ -53,6 +60,47 @@
 
 	<!-- Directives -->
 	<script src="../js/Directives/post.js"></script>
+
+	<!-- Jasmine -->
+	<link rel="shortcut icon" type="image/png" href="../jasmine/lib/jasmine-2.5.2/jasmine_favicon.png">
+<link rel="stylesheet" type="text/css" href="../jasmine/lib/jasmine-2.5.2/jasmine.css">
+
+<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine.js"></script>
+<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/jasmine-html.js"></script>
+<script type="text/javascript" src="../jasmine/lib/jasmine-2.5.2/boot.js"></script>
+	<script src="//code.angularjs.org/1.0.6/angular-mocks.js"></script>
+	<script type="text/javascript">
+	
+describe("AccountDirective", function () {
+	var compile, scope, directiveElem;
+
+	beforeEach(function(){
+		module('MidiaApp');
+		inject(function($compile, $rootScope){
+		    compile = $compile;
+		    scope = $rootScope.$new();
+		    scope.config = {
+		      name: 'bob'
+		    };
+  		});
+  		directiveElem = getCompiledElement();
+	});
+
+	function getCompiledElement(){
+	  var compiledDirective = compile(angular.element('<account info="config" "></account>'))(scope);
+	  scope.$digest();
+	  return compiledDirective;
+	}
+
+	it('notify on isolated scope should be one-way bound', function(){
+	  var isolatedScope = directiveElem.isolateScope();
+
+	  expect(isolatedScope.accountInfo.name).toEqual('bob');
+	});
+});
+
+
+	</script>
 
 </body>
 </html>

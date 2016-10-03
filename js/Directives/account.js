@@ -1,9 +1,8 @@
 app.directive('account', function(){
   return {
     scope: {
-      name: '=',
-      img: '='
+      accountInfo: '@info'
     },
-    templateUrl: 'js/Directives/account.html'
+    templateUrl: '../js/Directives/account.html'
   };
 });
