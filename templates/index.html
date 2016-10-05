@@ -36,17 +36,20 @@
 <!-- Our Website Content Goes Here -->
 	
 	<div class="main" ng-controller="MainController">
-		<div style="float: right; margin-right: 20px;">
-	   		<button type="button" id="login">Log in</button>
+	    <div class="container-fluid">
+			<div class = "row">
+				<div class="col-xs-6 col-sm-4"></div>
+				<div class="col-xs-6 col-sm-4" align="center">
+					<img ng-src="../img/MidiaLogo.png" alt="" class="img-thumbnail" height="120" width = "200"/>
+				</div>
+				<div class="col-xs-6 col-sm-4" align="right">
+					<button type="button" id="login">Log in</button>
+				</div>
+			</div>
 		</div>
-		<br></br>
 	    <div class="container-fluid">
 		    <div class="row">
-		    	<h2 class="text-center">
-				<img ng-src="../img/MidiaLogo.png" alt="" class="img-thumbnail" height="120" width = "200"/>
-				<br></br>
-					Midia
-				</h2>
+		    	<h2 class="text-center">Midia</h2>
 				<account info="accountOne">
 				</account>
 			</div>
