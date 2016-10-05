@@ -16,3 +16,24 @@ app.controller('MainController', ['$scope', function($scope) {
 	};
 
 }]);
+
+$(function(){
+    $('#login').popover({       
+        placement: 'left',
+        html:true,
+        content:  $('#loginForm').html()
+    }).on('click', function(){
+      // $('.btn-primary').click(function(){
+       
+      //   $.post('/',  {
+      //       username: $('#username').val(),
+      //       password: $('#password').val(),
+      //   }, function(r) {
+          
+      //   })
+      // })
+      $('#createAccBtn').on('click', function(){
+		window.open("http://www.facebook.com/signup");
+	})
+  })
+})

@@ -36,7 +36,9 @@
 <!-- Our Website Content Goes Here -->
 	
 	<div class="main" ng-controller="MainController">
-		
+		<div style="float: right; margin-right: 20px;">
+	   		<button type="button" id="login">Log in</button>
+		</div>
 	    <div class="container-fluid">
 		    <div class="row">
 		    	<h2 class="text-center">Midia</h2>
@@ -49,12 +51,9 @@
 	          </post>
 	         </div>
 	    </div>
-
 	</div>
 
-	<div>
-	    <button type="button" id="login">Log in</button>
-	</div>
+	
 	<div id="loginForm" class="hide">
 	    <form>
 	        <div>
@@ -69,8 +68,8 @@
 	            </div>
 	                   
 	            <div class="form-group">
-	                <button type="button" class="btn btn-primary">Log in</button>
-	                <button type="button" class="btn btn-primary">Create Account</button>
+	                <button id="loginBtn" type="button" class="btn btn-primary">Log in</button>
+	                <button id="createAccBtn" type="button" class="btn btn-primary">Create Account</button>
 	            </div>
 	        </div>
 	    </form>
