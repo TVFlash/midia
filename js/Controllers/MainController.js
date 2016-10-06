@@ -24,25 +24,35 @@ app.controller('MainController', ['$scope', function($scope) {
 	$scope.userLoggedIn = false;
 
 	$scope.loginFunc = function(){
-    $('#login').popover({       
-        placement: 'left',
-        html:true,
-        content:  $('#loginForm').html()
-    }).on('click', function(){
-    	$scope.userLoggedIn = true;
-      // $('.btn-primary').click(function(){
-       
-      //   $.post('/',  {
-      //       username: $('#username').val(),
-      //       password: $('#password').val(),
-      //   }, function(r) {
-          
-      //   })
-      // })
-      $('#createAccBtn').on('click', function(){
-		window.open("http://www.facebook.com/signup");
-	})
-  })
-};
+	    	
+	          $('.btn-primary').click(function(){
+	       	
+	      //   $.post('/',  {
+	      //       username: $('#username').val(),
+	      //       password: $('#password').val(),
+	      //   }, function(r) {
+	          
+	      //   })
+		      $scope.$apply(function(){
+		      	$scope.userLoggedIn = true;
+		      	$('#login').popover('hide');
+		      });
+	       })
+	      $('#createAccBtn').on('click', function(){
+			window.open("http://www.facebook.com/signup");
+			})
+	  	};
+
+
+	var initPopover = function(){
+	    $('#login').popover({       
+	        placement: 'left',
+	        html:true,
+	        content:  $('#loginForm').html()
+	    }).on('click', $scope.loginFunc())
+	};
+	initPopover();
+	
 
 }]);
+
