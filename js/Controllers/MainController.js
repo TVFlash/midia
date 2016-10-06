@@ -23,9 +23,15 @@ app.controller('MainController', ['$scope', function($scope) {
 
 	$scope.userLoggedIn = false;
 
+	$scope.logoutFunc = function(){
+		$scope.userLoggedIn = false;
+		$('#login').popover('show');
+		location.reload();
+	};
+
 	$scope.loginFunc = function(){
 	    	
-	          $('.btn-primary').click(function(){
+		$('#loginBtn').click(function(){
 	       	
 	      //   $.post('/',  {
 	      //       username: $('#username').val(),
@@ -33,15 +39,15 @@ app.controller('MainController', ['$scope', function($scope) {
 	      //   }, function(r) {
 	          
 	      //   })
-		      $scope.$apply(function(){
-		      	$scope.userLoggedIn = true;
-		      	$('#login').popover('hide');
-		      });
-	       })
-	      $('#createAccBtn').on('click', function(){
+		    $scope.$apply(function(){
+		    	$scope.userLoggedIn = true;
+		    	$('#login').popover('hide');
+		    });
+	    })
+	    $('#createAccBtn').on('click', function(){
 			window.open("http://www.facebook.com/signup");
-			})
-	  	};
+		})
+	};
 
 
 	var initPopover = function(){
