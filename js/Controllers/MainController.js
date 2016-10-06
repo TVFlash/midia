@@ -3,13 +3,15 @@ app.controller('MainController', ['$scope', function($scope) {
 	$scope.posts = [
 		{
 		img: '../img/test.png',
-		text: 'Joe Coy',
-		subText: '9 Likes and 4 Comments'
+		mainText: 'Joe Coy',
+		subText: '9 Likes and 4 Comments',
+		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!'
 		},
 		{
 		img: '../img/test.png',
-		text: 'facebook2 text',
-		subText: '9 Likes and 4 Comments'
+		mainText: 'facebook2 text',
+		subText: 'subText',
+		postText:'postText'
 		}
 	];
 
