@@ -5,13 +5,15 @@ app.controller('MainController', ['$scope', function($scope) {
 		img: '../img/test.png',
 		mainText: 'Joe Coy',
 		subText: '9 Likes and 4 Comments',
-		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!'
+		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!',
+		timeStamp: '6h'
 		},
 		{
 		img: '../img/test.png',
 		mainText: 'facebook2 text',
 		subText: 'subText',
-		postText:'postText'
+		postText:'postText',
+		timeStamp:'time'
 		}
 	];
 

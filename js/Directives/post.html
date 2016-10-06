@@ -2,12 +2,15 @@
   <div class="panel-body">
   	<div class="row">
         <div class="col-xs-1">
-			<img ng-src="{{postInfo.img}}" alt="" class="img-thumbnail" />
+			<img ng-src="{{postInfo.img}}" alt="" class="img-thumbnail" height="50" width="50"/>
   		</div>
-  		<div class="col-xs-11">
-        	{{postInfo.mainText}}<br/>
+  		<div class="col-xs-10">
+        	<font color="blue" size="4"><b>{{postInfo.mainText}}</b></font></br>
 			{{postInfo.subText}}
         </div>
+		<div class="col-xs-1">
+			{{postInfo.timeStamp}}
+		</div>
     </div>
 	<div class="row">
 		<div class="col-xs-12">
