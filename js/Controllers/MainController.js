@@ -3,11 +3,13 @@ app.controller('MainController', ['$scope', function($scope) {
 	$scope.posts = [
 		{
 		img: '../img/test.png',
-		text: 'facebook text'
+		text: 'Joe Coy',
+		subText: '9 Likes and 4 Comments'
 		},
 		{
 		img: '../img/test.png',
-		text: 'facebook2 text'
+		text: 'facebook2 text',
+		subText: '9 Likes and 4 Comments'
 		}
 	];
 
