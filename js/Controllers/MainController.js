@@ -21,14 +21,15 @@ app.controller('MainController', ['$scope', function($scope) {
 		name: 'bob'
 	};
 
-}]);
+	$scope.userLoggedIn = false;
 
-$(function(){
+	$scope.loginFunc = function(){
     $('#login').popover({       
         placement: 'left',
         html:true,
         content:  $('#loginForm').html()
     }).on('click', function(){
+    	$scope.userLoggedIn = true;
       // $('.btn-primary').click(function(){
        
       //   $.post('/',  {
@@ -42,4 +43,6 @@ $(function(){
 		window.open("http://www.facebook.com/signup");
 	})
   })
-})
+};
+
+}]);

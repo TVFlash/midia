@@ -43,15 +43,17 @@
 					<img ng-src="../img/MidiaLogo.png" alt="" class="img-thumbnail" height="120" width = "200"/>
 				</div>
 				<div class="col-xs-6 col-sm-4" align="right">
-					<button type="button" id="login">Log in</button>
+					<button type="button" ng-click="loginFunc()" id="login">Log in</button>
 				</div>
 			</div>
 		</div>
 	    <div class="container-fluid">
 		    <div class="row">
 		    	<h2 class="text-center">Midia</h2>
-				<account info="accountOne">
-				</account>
+				<div ng-show="userLoggedIn===true">
+					<account info="accountOne">
+					</account>
+				</div>
 			</div>
 
 	    	<div class="card" ng-repeat="post in posts">
