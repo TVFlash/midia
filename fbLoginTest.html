@@ -87,7 +87,10 @@
   }
 
   function loadUserData(id) {
-    console.log("User : " + id);//TODO: Make call to server with ID
+    console.log("User : " + id);
+    $.post("api/login/" + id, function(data) {
+      
+    }, "json");
   }
 
 </script>
