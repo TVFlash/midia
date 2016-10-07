@@ -1,6 +1,6 @@
 import psycopg2 as driver
 
-con = driver.connect(database='postgres', user='postgres', host='localhost', password='mIdIa490')
+con = driver.connect(database='postgres', user='postgres', host='localhost', password='xxx')
 cur = con.cursor()
 
 cur.execute("""INSERT INTO users VALUES (0, '{"(twitter,mkbhd,0)"}');""");
