@@ -2,19 +2,69 @@ app.controller('MainController', ['$scope', function($scope) {
 
 	$scope.posts = [
 		{
-		img: '../img/test.png',
+		img: '../img/joePic.jpg',
 		mainText: 'Joe Coy',
 		subText: '9 Likes and 4 Comments',
 		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!',
 		timeStamp: '6h'
 		},
 		{
-		img: '../img/test.png',
-		mainText: 'facebook2 text',
-		subText: 'subText',
-		postText:'postText',
-		timeStamp:'time'
+		img: '../img/grandmaPic.jpg',
+		mainText: 'Rose Anne Coy',
+		subText: '323 likes and 8 Comments',
+		postText:'Google where is the banana bread recipe?',
+		timeStamp:'10h'
+		},
+		{
+		img: '../img/joePic.jpg',
+		mainText: 'Joe Coy',
+		subText: '47 Likes and 24 Comments',
+		postText:'Grandma this isn\'t Google...',
+		timeStamp:'2h'
+		},
+		{
+		img: '../img/michaelPic.jpg',
+		mainText: 'Michael Crabill',
+		subText: '10 Likes and 3 Comments',
+		postText:'Just saw Deadpool for the first time. I am officially in love with Ryan Reynolds and I do fear the T-rex',
+		timeStamp:'1d'
+		},
+		{
+		img: '../img/timPic.jpg',
+		mainText: 'Tim Vincent',
+		subText: '17 Likes and 5 Comments',
+		postText:'Just saw some amazing cute little puppers. They\'re gonna be doggos soon I bet.',
+		timeStamp:'7h'
+		},
+		{
+		img: '../img/coreyPic.jpg',
+		mainText: 'Corey Pitzo',
+		subText: '0 Likes and 1 Comments' ,
+		postText:'You know I think Taco Bell might be the greatest invention of all time.',
+		timeStamp:'4d'
+		},
+		{
+		img: '../img/pascalPic.jpg',
+		mainText: 'Pascal Lee',
+		subText: '23 Likes and 0 Comments',
+		postText:'Selling my Purdue football tickets, anyone want them?',
+		timeStamp:'1w'
+		},
+		{
+		img: '../img/pascalPic.jpg',
+		mainText: 'Pascal Lee',
+		subText: '3 Likes and 0 Comments',
+		postText:'Still have the tickets',
+		timeStamp:'3d'
+		},
+		{
+		img: '../img/pascalPic.jpg',
+		mainText: 'Pascal Lee',
+		subText: '1 Likes and 0 Comments',
+		postText:'Please someone just take them',
+		timeStamp:'1d'
 		}
+
 	];
 
 	$scope.accountOne = {
