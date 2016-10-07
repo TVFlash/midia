@@ -22,6 +22,7 @@ app.controller('MainController', ['$scope', function($scope) {
 	};
 
 	$scope.userLoggedIn = false;
+	$scope.username = '';
 
 	$scope.logoutFunc = function(){
 		$scope.userLoggedIn = false;
@@ -41,6 +42,7 @@ app.controller('MainController', ['$scope', function($scope) {
 	      //   })
 		    $scope.$apply(function(){
 		    	$scope.userLoggedIn = true;
+		    	$scope.username = 'bob';
 		    	$('#login').popover('hide');
 		    });
 	    })
