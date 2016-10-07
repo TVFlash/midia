@@ -22,11 +22,11 @@ app.controller('MainController', ['$scope', function($scope) {
 	};
 
 	$scope.userLoggedIn = false;
+	$scope.username = '';
 
 	$scope.logoutFunc = function(){
 		$scope.userLoggedIn = false;
 		$('#login').popover('show');
-		location.reload();
 	};
 
 	$scope.loginFunc = function(){
@@ -41,10 +41,16 @@ app.controller('MainController', ['$scope', function($scope) {
 	      //   })
 		    $scope.$apply(function(){
 		    	$scope.userLoggedIn = true;
+		    	$scope.username = 'bob';
 		    	$('#login').popover('hide');
 		    });
 	    })
+	    
 	    $('#createAccBtn').on('click', function(){
+			window.open("http://www.facebook.com/signup");
+		})
+
+	    $('#forgotPassword').on('click', function(){
 			window.open("http://www.facebook.com/signup");
 		})
 	};
