@@ -27,7 +27,6 @@ app.controller('MainController', ['$scope', function($scope) {
 	$scope.logoutFunc = function(){
 		$scope.userLoggedIn = false;
 		$('#login').popover('show');
-		location.reload();
 	};
 
 	$scope.loginFunc = function(){
