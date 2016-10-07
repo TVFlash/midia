@@ -46,7 +46,12 @@ app.controller('MainController', ['$scope', function($scope) {
 		    	$('#login').popover('hide');
 		    });
 	    })
+	    
 	    $('#createAccBtn').on('click', function(){
+			window.open("http://www.facebook.com/signup");
+		})
+
+	    $('#forgotPassword').on('click', function(){
 			window.open("http://www.facebook.com/signup");
 		})
 	};
