@@ -18,6 +18,7 @@
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
       testAPI();
+      console.log(response.authResponse)
       loadUserData(response.authResponse.userID);
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -46,8 +47,15 @@
     cookie     : true,  // enable cookies to allow the server to access 
                         // the session
     xfbml      : true,  // parse social plugins on this page
-    version    : 'v2.7' // use graph api version 2.7
-  });
+    version    : 'v2.3', // use graph api version 2.7
+  })
+  FB.login(function(response){
+    if(response.session) {
+	//User is logged in
+    } else {
+	//User cancelled
+    }
+  },{scope:"user_status user_posts"});
 
   // Now that we've initialized the JavaScript SDK, we call 
   // FB.getLoginStatus().  This function gets the state of the
