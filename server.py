@@ -31,7 +31,7 @@ def hasFeed(user, feed):
 @app.route('/api/login/<int:userID>', methods=['POST'])
 def login(userID):
 	#Get user from database
-	print("Got user" , userID)
+	print("Got user: " , userID)
 	#If exists load assets
 	if has_user(userID): 
 		print(userID)
