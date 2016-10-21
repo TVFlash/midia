@@ -1,22 +1,38 @@
-from flask import Flask, jsonify, request, url_for, render_template 
+from flask import Flask, jsonify, request, url_for, render_template, g 
+from collections import namedtuple
+import psycopg2 as driver
+import requests
+import argparse
+import json
 
 app = Flask(__name__)
+
+#Database information
+password = '' 
 
 class userObject:
 	def __init__(self):
 		self.userID = ''
+		self.token = ''
 		self.twitchFeed = ''
 		self.twitterFeed = ''
 		self.redditFeed = ''
 		self.xkcdFeed = ''
 		self.githubFeed = ''
 		self.hackerNewsFeed = ''
+		self.fbStories = [] #IDs of stories showed 
 		self.activeFeeds = []
 
-connected_users = []
+class fbStory:
+	def __init__(self):
+		self.id = ''
+		self.message = ''
+		self.time = ''
+
+connected_users = {}
 
 #====================================================================================
-#MARK: API endpoints
+#MARK: API endpoints 
 #====================================================================================
 
 @app.route('/')
@@ -30,18 +46,42 @@ def hasFeed(user, feed):
 
 @app.route('/api/login/<int:userID>', methods=['POST'])
 def login(userID):
+
+	if not request.json:
+			return jsonify({'err': 'Not JSON type'}), 201
+	
+	token = request.json['token']
 	#Get user from database
-	print("Got user: " , userID)
 	#If exists load assets
-	if has_user(userID): 
-		print(userID)
+	user = has_user(userID)
+	if user != False: 
+		user.token = token #Update facebook token
 	#Else create user account 
 	else :
 		print("Does not exist, creating account")
+		add_user(userID)
+		user = userObject()
+		user.userID = userID
+		user.token = token
+
+	connected_users[userID] = user
+
+	#Pull latest FB data 
+	fb_content = requests.get('https://graph.facebook.com/v2.3/me/feed?access_token=' + token).content
+	parsed_json = []
+	raw_json = json.loads(fb_content)
+	for obj in raw_json[u'data']:
+		parsed_json.append(namedtuple('fbStory', obj.keys())(*obj.values()))
+		user.fbStories.append(obj['id'])
+
 	return jsonify({'result': 'login'}) #TODO : Add error checking and return payload
 
 @app.route('/api/refresh/<int:userID>', methods=['POST'])
 def send_refresh(userID):
+	user = connected_users[userID] #Fetch requesting user
+	#make GET request to FB API
+	#if any diff then return it
+	#else return nothing
 	return False #TODO: Return any diff in the user's feeds
 
 @app.route('/api/update/<int:userID>/<string:feedType>', methods=['POST'])
@@ -57,18 +97,52 @@ def add_interaction(userID, feedType):
 #====================================================================================
 
 def has_user(userID):
-	return False #TODO: Check from database
+	con = get_db()
+	cur = con.cursor()
+	query = 'SELECT * FROM users where user_id={}'.format(userID)
+
+	cur.execute(query)
+
+	con.commit()
+
+	print(cur.rowcount)
+	if cur.rowcount == 0:
+		return False #TODO: Check from database
+	user = userObject()
+	user.userID = userID
+	return user
 
 def add_user(userID):
+	con = get_db()
+	cur = con.cursor()
+	query = 'INSERT INTO users (user_id) VALUES ({})'.format(userID)
+	cur.execute(query)
+	con.commit()
+
 	return False #TODO: Add user to database
 
 def send_feed(userID, feedType):
 	return False #TODO: Check diff for specified feed 
+
+@app.before_first_request
+def establish_db_connection():
+	g.db = driver.connect(database='postgres', user='postgres', host='localhost', password=password)
+
+def get_db():
+	if not hasattr(g, 'db'):
+		print("Connecting to DB...")
+		establish_db_connection()
+	return g.db
 
 #====================================================================================
 #MARK: Main
 #====================================================================================
 
 if __name__ == '__main__':
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-p', type=str, required=True, help="usage: -p [password]")
+	args = parser.parse_args()
+	password = args.p
+	print(password)
 	app.run(host='0.0.0.0',port=2000,debug=True)
 
