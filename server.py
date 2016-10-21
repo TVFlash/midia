@@ -21,7 +21,7 @@ connected_users = []
 
 @app.route('/')
 def renderLanding():
-	return "Welcome" #Waiting for frontent stuff
+	return render_template("fblanding.html") #Waiting for frontent stuff
 
 def hasFeed(user, feed):
 	if user.activeFeeds.contains(feed):
