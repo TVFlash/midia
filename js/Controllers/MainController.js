@@ -67,6 +67,10 @@ app.controller('MainController', ['$scope', function($scope) {
 
 	];
 
+	$scope.settingsData = {
+		
+	};
+
 	$scope.accountOne = {
 		name: 'bob'
 	};
