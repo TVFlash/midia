@@ -44,7 +44,9 @@
 					<h2 class="text-center">Midia</h2>
 				</div>
 				<div class="col-xs-6 col-sm-4" align="right" >
-					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===false" ng-click="loginFunc()" id="login">Log in</button>
+					<div id="status"></div>
+					
+					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===false" onclick="loginFunc();" id="login">Log in</button>
 					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===true" ng-click="logoutFunc()" id="logout">Log out</button>
 					<div ng-show="userLoggedIn===true">
 						<account info="accountOne">
@@ -57,8 +59,9 @@
 			
 		</div>
 	    <div class="container-fluid">
-	    	<div class="card" ng-repeat="post in posts">
-	          <post info="post">
+	    	<div class="card" ng-repeat="pst in posts">
+	          <post info="pst" template="{{pst.src}}">
+
 	          </post>
 	         </div>
 	    </div>
@@ -88,6 +91,24 @@
 
 <!--facebook login script-->
 <script>
+
+	function loginFunc(){
+		FB.login(function(response){
+	    if (response.status === 'connected') {
+	    // Logged into your app and Facebook.
+		    $scope.$apply(function(){
+			    	$scope.userLoggedIn = true;
+			    	$scope.username = 'bob';
+			    });
+		} else if (response.status === 'not_authorized') {
+		    // The person is logged into Facebook, but not your app.
+		} else {
+		    // The person is not logged into Facebook, so we're not sure if
+		    // they are logged into this app or not.
+		}
+	  },{scope:"user_status user_posts"});
+	}
+
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -128,14 +149,9 @@
                         // the session
     xfbml      : true,  // parse social plugins on this page
     version    : 'v2.3', // use graph api version 2.7
-  })
-  FB.login(function(response){
-    if(response.session) {
-	//User is logged in
-    } else {
-	//User cancelled
-    }
-  },{scope:"user_status user_posts"});
+  });
+
+  
 
   // Now that we've initialized the JavaScript SDK, we call 
   // FB.getLoginStatus().  This function gets the state of the
@@ -197,8 +213,7 @@
   the FB.login() function when clicked.
 -->
 
-<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-</fb:login-button>
+
 
 	<!-- Our Website Javascripts -->
 	<script src="../js/main.js"></script>

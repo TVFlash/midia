@@ -1,27 +1,31 @@
-<div class="panel panel-default">
-  <div class="panel-body">
-	   	<div class="col-xs-1" style="padding: 0px">
-			<img ng-src="../img/twitchIcon.jpg" alt="fbLogo" class="image-responsive pull-left" style="max-height:100%; max-width: 75%;"/>
-	   	</div>
-	   	<div class="col-xs-11" style="padding-top: 10px">
-	  		<div class="row">
-		        <div class="col-xs-1">
-					<img ng-src="{{postInfo.img}}" height="50" width="50" />
-		  		</div>
-		  		<div class="col-xs-10">
-		        	<font color="blue" size="4"><b>{{postInfo.mainText}}</b></font></br>
-					<font color="gray" size="2">{{postInfo.subText}}</font>
-		        </div>
-				<div class="col-xs-1">
-					{{postInfo.timeStamp}}
+<div class="col-xs-8">
+	<div class="row">
+		<div class="panel panel-default">
+		  <div class="panel-body">
+			   	<div class="col-xs-1" style="padding: 0px;">
+					<img ng-src="../img/twitchIcon.png" alt="fbLogo" class="image-responsive pull-left" style="max-height:100%; max-width: 75%;"/>
+			   	</div>
+			   	<div class="col-xs-11" style="padding-top: 10px;">
+			  		<div class="row">
+				        <div class="col-xs-1" style="padding-right: 0px; padding-left: 0px;">
+							<img ng-src="{{postInfo.img}}" height="50" width="50"/>
+							</div>
+						<div class="col-xs-10" style=" padding-left: 0px;">
+				        	<font color="blue" size="4"><b>{{postInfo.mainText}}</b></font></br>
+							<font color="gray" size="2">{{postInfo.subText}}</font>
+				        </div>
+						<div class="col-xs-1">
+							{{postInfo.timeStamp}}
+						</div>
+			    	</div>
+					<div class="row"> 
+						<div class="col-xs-11" style="padding-left: 0px;">
+							{{postInfo.postText}}
+						</div>
+					</div>
 				</div>
-	    	</div>
-			<div class="row">
-				<div class="col-xs-12">
-					{{postInfo.postText}}
-				</div>
-			</div>
+		  </div>
 		</div>
-  </div>
+	</div>
 </div>
 

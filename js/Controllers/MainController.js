@@ -6,28 +6,32 @@ app.controller('MainController', ['$scope', function($scope) {
 		mainText: 'Joe Coy',
 		subText: '9 Likes and 4 Comments',
 		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!',
-		timeStamp: '6h'
+		timeStamp: '6h',
+		src: 'post'
 		},
 		{
 		img: '../img/grandmaPic.jpg',
 		mainText: 'Rose Anne Coy',
-		subText: '323 likes and 8 Comments',
-		postText:'Google where is the banana bread recipe?',
-		timeStamp:'10h'
+		subText: 'Playing Minecraft',
+		postText:'3,000 Viewers',
+		timeStamp:'10h',
+		src: 'twitch'
 		},
 		{
 		img: '../img/joePic.jpg',
-		mainText: 'Joe Coy',
-		subText: '47 Likes and 24 Comments',
-		postText:'Grandma this isn\'t Google...',
-		timeStamp:'2h'
+		mainText: 'joeschmoe commit',
+		subText: '3 commits, 47+, 10-',
+		postText:'fixed CS490 project',
+		timeStamp:'2h',
+		src: 'github'
 		},
 		{
 		img: '../img/michaelPic.jpg',
-		mainText: 'Michael Crabill',
-		subText: '10 Likes and 3 Comments',
-		postText:'Just saw Deadpool for the first time. I am officially in love with Ryan Reynolds and I do fear the T-rex',
-		timeStamp:'1d'
+		mainText: 'Michael Crabill\'s facebook picture',
+		subText: 'u/AmericanEagle r/funny',
+		postText:'Up: 30, Down: 40, 100 comments',
+		timeStamp:'1d',
+		src: 'reddit'
 		},
 		{
 		img: '../img/timPic.jpg',
@@ -83,7 +87,7 @@ app.controller('MainController', ['$scope', function($scope) {
 		$('#login').popover('show');
 	};
 
-	$scope.loginFunc = function(){
+	/*$scope.loginFunc = function(){
 	    	
 		$('#loginBtn').click(function(){
 	       	
@@ -99,6 +103,8 @@ app.controller('MainController', ['$scope', function($scope) {
 		    	$('#login').popover('hide');
 		    });
 	    })
+
+	    
 	    
 	    $('#createAccBtn').on('click', function(){
 			window.open("http://www.facebook.com/signup");
@@ -107,17 +113,19 @@ app.controller('MainController', ['$scope', function($scope) {
 	    $('#forgotPassword').on('click', function(){
 			window.open("http://www.facebook.com/signup");
 		})
-	};
 
 
-	var initPopover = function(){
+	};*/
+
+
+	/*var initPopover = function(){
 	    $('#login').popover({       
 	        placement: 'left',
 	        html:true,
 	        content:  $('#loginForm').html()
 	    }).on('click', $scope.loginFunc())
 	};
-	initPopover();
+	initPopover();*/
 	
 
 }]);
