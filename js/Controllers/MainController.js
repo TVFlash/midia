@@ -1,4 +1,4 @@
-app.controller('MainController', ['$scope', function($scope) {
+app.controller('MainController', ['$scope', '$window', function($scope, $window) {
 
 	$scope.posts = [
 		{
@@ -86,6 +86,8 @@ app.controller('MainController', ['$scope', function($scope) {
 		$scope.userLoggedIn = false;
 		$('#login').popover('show');
 	};
+
+
 
 	/*$scope.loginFunc = function(){
 	    	
