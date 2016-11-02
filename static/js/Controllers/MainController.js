@@ -34,6 +34,28 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		src: 'reddit'
 		},
 		{
+		img: '../static/img/xkcdContent.png',
+		mainText: 'Purity Ranking',
+		subText: 'Permanent link to this comic: http://xkcd.com/435/',
+		postText:'Image URL (for hotlinking/embedding): http://imgs.xkcd.com/comics/purity.png',
+		timeStamp:'3d',
+		src: 'xkcd'
+		},
+		{
+		img: '../static/img/coreyPic.jpg',
+		mainText: 'Corey Pitzo',
+		subText: '@coreyLoLgod',
+		postText:'TSM4lyfe',
+		timeStamp:'3m',
+		src: 'twitter'
+		},
+		{
+		mainText: 'Facebook Q3 2016 Results',
+		subText: '23 points by tvincent',
+		timeStamp:'3h',
+		src: 'hackernews'
+		},
+		{
 		img: '../static/img/timPic.jpg',
 		mainText: 'Tim Vincent',
 		subText: '17 Likes and 5 Comments',

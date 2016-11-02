@@ -17,6 +17,12 @@ app.directive('post', function(){
 	      return '../static/js/Directives/githubPost.html';
 	    else if ($scope.postInfo.src == "reddit")
 	      return '../static/js/Directives/redditPost.html';
+      else if ($scope.postInfo.src == "xkcd")
+        return '../static/js/Directives/xkcdPost.html';
+      else if ($scope.postInfo.src == "twitter")
+        return '../static/js/Directives/twitterPost.html';
+      else if ($scope.postInfo.src == "hackernews")
+        return '../static/js/Directives/hackernewsPost.html';
       	else 
       	  return '../static/js/Directives/post.html';
       }
