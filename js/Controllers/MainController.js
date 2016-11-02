@@ -8,7 +8,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!',
 		timeStamp: '6h',
 		src: 'post'
-		},
+		},/*
 		{
 		img: '../img/grandmaPic.jpg',
 		mainText: 'Rose Anne Coy',
@@ -32,7 +32,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		postText:'Up: 30, Down: 40, 100 comments',
 		timeStamp:'1d',
 		src: 'reddit'
-		},
+		},*/
 		{
 		img: '../img/timPic.jpg',
 		mainText: 'Tim Vincent',
@@ -76,7 +76,8 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 	};
 
 	$scope.accountOne = {
-		name: 'user'
+		name: 'user',
+		id: 0
 	};
 
 	$scope.userLoggedIn = false;
@@ -131,23 +132,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 
 	$scope.loginFunc = function(){
 		FB.login(function(response){
-	    if (response.status === 'connected') {
-	    // Logged into your app and Facebook.
-	    loadUserData(response.authResponse);
-		    $scope.$apply(function(){
-			    	$scope.userLoggedIn = true;
-			    	$scope.accountOne.name = response.authResponse.first_name;
-			    });
-		} else if (response.status === 'not_authorized') {
-	      // The person is logged into Facebook, but not your app.
-	      document.getElementById('status').innerHTML = 'Please log ' +
-	        'into this app.';
-	    } else {
-	      // The person is not logged into Facebook, so we're not sure if
-	      // they are logged into this app or not.
-	      document.getElementById('status').innerHTML = 'Please log ' +
-	        'into Facebook.';
-    }
+	    statusChangeCallback(response);
 	  },{scope:"user_status user_posts"});
 	};
 
@@ -165,6 +150,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
       loadUserData(response.authResponse);
       $scope.$apply(function(){
 			    	$scope.userLoggedIn = true;
+			    	$scope.accountOne.id = response.authResponse.userID;
 			    	$scope.accountOne.name = response.authResponse.first_name;
 			    });
     } else if (response.status === 'not_authorized') {
@@ -251,7 +237,20 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
     })
   }
 
-	
+  function getPageData(){
+  	$.ajax({
+      type: "POST", 
+      url: "/api/refresh/" + $scope.accountOne.id,
+      contentType: "application/json"
+    }).done(function(data){
+        console.log("[Request sent]")
+        $scope.posts = $.parseJSON(data);
+    })
+  }
+  	//getPageData();
+	//setInterval(getPageData, 15*1000);
+
+
 
 }]);
 
