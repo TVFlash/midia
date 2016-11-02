@@ -8,9 +8,9 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!',
 		timeStamp: '6h',
 		src: 'post'
-		},/*
+		},
 		{
-		img: '../img/grandmaPic.jpg',
+		img: '../static/img/grandmaPic.jpg',
 		mainText: 'Rose Anne Coy',
 		subText: 'Playing Minecraft',
 		postText:'3,000 Viewers',
@@ -18,7 +18,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		src: 'twitch'
 		},
 		{
-		img: '../img/joePic.jpg',
+		img: '../static/img/joePic.jpg',
 		mainText: 'joeschmoe commit',
 		subText: '3 commits, 47+, 10-',
 		postText:'fixed CS490 project',
@@ -26,13 +26,13 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		src: 'github'
 		},
 		{
-		img: '../img/michaelPic.jpg',
+		img: '../static/img/michaelPic.jpg',
 		mainText: 'Michael Crabill\'s facebook picture',
 		subText: 'u/AmericanEagle r/funny',
 		postText:'Up: 30, Down: 40, 100 comments',
 		timeStamp:'1d',
 		src: 'reddit'
-		},*/
+		},
 		{
 		img: '../static/img/timPic.jpg',
 		mainText: 'Tim Vincent',
