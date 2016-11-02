@@ -1,11 +1,31 @@
 h2 {
     font-family: "Lucida Console", serif;
-    color: #00ccff;
+	color: #edd736;
 }
 
 body {
 	padding:0;
 	margin:0;
+}
+
+.top-section {
+	background-color: #ed1c24;
+}
+
+.bottom-section {
+	background-color: #edd736;
+}
+
+.post-section {
+	background-color: #ffffff;
+}
+
+.facebook-side {
+	background-color: #4a6eaa;
+}
+
+.side-panel {
+	text-align: center;
 }
 
 /**
