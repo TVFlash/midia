@@ -2,7 +2,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 
 	$scope.posts = [
 		{
-		img: '../img/joePic.jpg',
+		img: '../static/img/joePic.jpg',
 		mainText: 'Joe Coy',
 		subText: '9 Likes and 4 Comments',
 		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!',
@@ -34,35 +34,35 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		src: 'reddit'
 		},*/
 		{
-		img: '../img/timPic.jpg',
+		img: '../static/img/timPic.jpg',
 		mainText: 'Tim Vincent',
 		subText: '17 Likes and 5 Comments',
 		postText:'Just saw some amazing cute little puppers. They\'re gonna be doggos soon I bet.',
 		timeStamp:'7h'
 		},
 		{
-		img: '../img/coreyPic.jpg',
+		img: '../static/img/coreyPic.jpg',
 		mainText: 'Corey Pitzo',
 		subText: '0 Likes and 1 Comments' ,
 		postText:'You know I think Taco Bell might be the greatest invention of all time.',
 		timeStamp:'4d'
 		},
 		{
-		img: '../img/pascalPic.jpg',
+		img: '../static/img/pascalPic.jpg',
 		mainText: 'Pascal Lee',
 		subText: '23 Likes and 0 Comments',
 		postText:'Selling my Purdue football tickets, anyone want them?',
 		timeStamp:'1w'
 		},
 		{
-		img: '../img/pascalPic.jpg',
+		img: '../static/img/pascalPic.jpg',
 		mainText: 'Pascal Lee',
 		subText: '3 Likes and 0 Comments',
 		postText:'Still have the tickets',
 		timeStamp:'3d'
 		},
 		{
-		img: '../img/pascalPic.jpg',
+		img: '../static/img/pascalPic.jpg',
 		mainText: 'Pascal Lee',
 		subText: '1 Likes and 0 Comments',
 		postText:'Please someone just take them',
@@ -148,11 +148,14 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
       testAPI();
       console.log(response.authResponse)
       loadUserData(response.authResponse);
-      $scope.$apply(function(){
+      FB.api('/me', function(response) {
+       			$scope.$apply(function(){
 			    	$scope.userLoggedIn = true;
-			    	$scope.accountOne.id = response.authResponse.userID;
-			    	$scope.accountOne.name = response.authResponse.first_name;
+			    	$scope.accountOne.name = response.name;
+			    	$scope.accountOne.id = response.ID;
 			    });
+     		});
+
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log ' +

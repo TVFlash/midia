@@ -3,6 +3,6 @@ app.directive('settings', function(){
     scope: {
       settingsInfo: '=info'
     },
-    templateUrl: '../js/Directives/settings.html'
+    templateUrl: '../static/js/Directives/settings.html'
   };
 });

@@ -3,6 +3,6 @@ app.directive('account', function(){
     scope: {
       accountInfo: '=info'
     },
-    templateUrl: '../js/Directives/account.html'
+    templateUrl: '../static/js/Directives/account.html'
   };
 });

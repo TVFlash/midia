@@ -42,11 +42,10 @@
 			 --><div class = "row top-section"><!--
 			 --><div class="col-xs-4 col-sm-4"></div>
 				<div class="col-xs-4 col-sm-4" align="center">
-					<img ng-src="../img/MidiaLogo.png" alt="" class="img-thumbnail" height="120" width = "200"/>
+					<img ng-src="../static/img/MidiaLogo.png" alt="" class="img-thumbnail" height="120" width = "200"/>
 					<h2 class="text-center">Midia</h2>
 				</div><!--
 			 --><div class="col-xs-4 col-sm-4" align="right" >
-					<div id="status"></div>
 					
 					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===false" ng-click="loginFunc()" id="login">Log in</button>
 					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===true" ng-click="logoutFunc()" id="logout">Log out</button>
@@ -60,7 +59,7 @@
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 								  		<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
-								  		<img ng-src="../img/sideFB.jpg" alt="fbLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
+								  		<img ng-src="../static/img/sideFB.jpg" alt="fbLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 	                					<label>Username</label>
 						                <input type="text" id="usernamefb" width="200px">
 						            </div>						  		
@@ -76,7 +75,7 @@
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 								  		<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
-								  		<img ng-src="../img/twitchIcon.png" alt="twitchLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
+								  		<img ng-src="../static/img/twitchIcon.png" alt="twitchLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 	                					<label>Username</label>
 						                <input type="text" id="usernamefb" width="200px">
 						            </div>						  		
@@ -84,7 +83,7 @@
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 								  		<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
-								  		<img ng-src="../img/githubIcon.png" alt="gitHubLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
+								  		<img ng-src="../static/img/githubIcon.png" alt="gitHubLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 	                					<label>Username</label>
 						                <input type="text" id="usernamefb" width="200px">
 						            </div>						  		
@@ -108,7 +107,7 @@
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 								  		<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
-								  		<img ng-src="../img/redditIcon.png" alt="redditLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
+								  		<img ng-src="../static/img/redditIcon.png" alt="redditLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 	                					<label>Username</label>
 						                <input type="text" id="usernamefb" width="200px">
 						            </div>						  		
@@ -173,15 +172,15 @@
 
 
 	<!-- Our Website Javascripts -->
-	<script src="../js/main.js"></script>
+	<script src="../static/js/main.js"></script>
 
 	<!-- Controllers -->
-	<script src="../js/Controllers/MainController.js"></script>
+	<script src="../static/js/Controllers/MainController.js"></script>
 
 	<!-- Directives -->
-	<script src="../js/Directives/post.js"></script>
-	<script src="../js/Directives/settings.js"></script>
-	<script src="../js/Directives/account.js"></script>
+	<script src="../static/js/Directives/post.js"></script>
+	<script src="../static/js/Directives/settings.js"></script>
+	<script src="../static/js/Directives/account.js"></script>
 
 
 </body>
