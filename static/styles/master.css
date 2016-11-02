@@ -3,6 +3,11 @@ h2 {
     color: #00ccff;
 }
 
+body {
+	padding:0;
+	margin:0;
+}
+
 /**
  * Profile image component
  */
