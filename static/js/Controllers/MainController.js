@@ -110,8 +110,6 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		$('#login').popover('show');
 	};
 
-
-
 	/*$scope.loginFunc = function(){
 	    	
 		$('#loginBtn').click(function(){
