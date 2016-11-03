@@ -23,11 +23,14 @@ class userObject:
 		self.fbStories = [] #IDs of stories showed 
 		self.activeFeeds = []
 
-class fbStory:
+class postObject:
 	def __init__(self):
 		self.id = ''
+		self.source = ''
 		self.message = ''
 		self.time = ''
+		self.link = ''
+		self.picture = ''
 
 connected_users = {}
 
@@ -66,13 +69,9 @@ def login(userID):
 
 	connected_users[userID] = user
 
-	#Pull latest FB data 
-	fb_content = requests.get('https://graph.facebook.com/v2.3/me/feed?access_token=' + token).content
-	parsed_json = []
-	raw_json = json.loads(fb_content)
-	for obj in raw_json[u'data']:
-		parsed_json.append(namedtuple('fbStory', obj.keys())(*obj.values()))
-		user.fbStories.append(obj['id'])
+	# #Pull latest FB data 
+	#for post in update_facebook(userID):
+	#	print_post(post)
 
 	return jsonify({'result': 'login'}) #TODO : Add error checking and return payload
 
@@ -105,7 +104,6 @@ def has_user(userID):
 
 	con.commit()
 
-	print(cur.rowcount)
 	if cur.rowcount == 0:
 		return False #TODO: Check from database
 	user = userObject()
@@ -119,10 +117,30 @@ def add_user(userID):
 	cur.execute(query)
 	con.commit()
 
-	return False #TODO: Add user to database
-
 def send_feed(userID, feedType):
 	return False #TODO: Check diff for specified feed 
+
+def update_facebook(userID):
+	user = connected_users[userID]
+	fb_content = requests.get('https://graph.facebook.com/v2.3/me/feed?access_token=' + user.token).content
+	parsed_json = []
+	raw_json = json.loads(fb_content)
+	for obj in raw_json[u'data']:
+		if obj['id'] not in user.fbStories:
+			post = postObject()
+			post.id = obj['id']
+			post.source = 'facebook'
+			if 'message' in obj:
+				post.message = obj['message']
+			else:
+				post.message = obj['story']
+			post.link = 'https://www.facebook.com/{}/posts/{}?pnref=story'.format(post.id.split('_')[0], post.id.split('_')[1])
+			if 'picture' in obj:
+				post.picture = obj['picture']
+			print(post.link)
+			parsed_json.append(post)
+			user.fbStories.append(post.id)
+	return parsed_json
 
 @app.before_first_request
 def establish_db_connection():
@@ -134,6 +152,14 @@ def get_db():
 		establish_db_connection()
 	return g.db
 
+def print_post(post):
+	print(post.id)
+	print(post.source)
+	print(post.message)
+	print(post.time)
+	print(post.link)
+	print(post.picture)
+
 #====================================================================================
 #MARK: Main
 #====================================================================================
@@ -143,6 +169,5 @@ if __name__ == '__main__':
 	parser.add_argument('-p', type=str, required=True, help="usage: -p [password]")
 	args = parser.parse_args()
 	password = args.p
-	print(password)
 	app.run(host='0.0.0.0',port=2000,debug=True)
 
