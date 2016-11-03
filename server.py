@@ -70,8 +70,7 @@ def login(userID):
 	connected_users[userID] = user
 
 	# #Pull latest FB data 
-	#for post in update_facebook(userID):
-	#	print_post(post)
+	update_facebook(userID)
 
 	return jsonify({'result': 'login'}) #TODO : Add error checking and return payload
 
@@ -134,6 +133,7 @@ def update_facebook(userID):
 				post.message = obj['message']
 			else:
 				post.message = obj['story']
+			post.time = obj['created_time']
 			post.link = 'https://www.facebook.com/{}/posts/{}?pnref=story'.format(post.id.split('_')[0], post.id.split('_')[1])
 			if 'picture' in obj:
 				post.picture = obj['picture']
@@ -141,6 +141,9 @@ def update_facebook(userID):
 			parsed_json.append(post)
 			user.fbStories.append(post.id)
 	return parsed_json
+
+def update_reddit(userID):
+	user = connected_users[userID]
 
 @app.before_first_request
 def establish_db_connection():
