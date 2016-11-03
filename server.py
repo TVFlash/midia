@@ -4,6 +4,7 @@ import psycopg2 as driver
 import requests
 import argparse
 import json
+import urllib2
 
 app = Flask(__name__)
 
@@ -144,6 +145,21 @@ def update_facebook(userID):
 
 def update_reddit(userID):
 	user = connected_users[userID]
+
+def update_xkcd(userID):
+	user = connected_users[userID]
+	page = urllib2.urlopen('http://xkcd.com/info.0.json')
+	cont = page.read()
+	obj = json.loads(cont)
+	parsed_json = []
+	post = postObject()
+	post.picture = obj['img']
+	post.source = 'xkcd' 
+	post.id = 0 ### THIS NEEDS TO BE CHANGED
+	post.link = "http://xkcd.com"
+	parsed_json.append(post)
+	user.xkcdFeed.append(post.id)
+	return parsed_json
 
 @app.before_first_request
 def establish_db_connection():
