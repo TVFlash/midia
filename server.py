@@ -5,6 +5,7 @@ import requests
 import argparse
 import json
 import urllib2
+import datetime
 
 app = Flask(__name__)
 
@@ -155,8 +156,9 @@ def update_xkcd(userID):
 	post = postObject()
 	post.picture = obj['img']
 	post.source = 'xkcd' 
-	post.id = 0 ### THIS NEEDS TO BE CHANGED
+	post.id = obj['num'] ### THIS NEEDS TO BE CHANGED
 	post.link = "http://xkcd.com"
+	post.time = str(datetime.datetime.now())
 	parsed_json.append(post)
 	user.xkcdFeed.append(post.id)
 	return parsed_json
