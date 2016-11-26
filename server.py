@@ -19,10 +19,10 @@ class userObject:
 		self.twitchFeed = ''
 		self.twitterFeed = ''
 		self.redditFeed = ''
-		self.xkcdFeed = ''
+		self.xkcdFeed = []
 		self.githubFeed = ''
 		self.hackerNewsFeed = ''
-		self.fbStories = [] #IDs of stories showed 
+		self.fbStories = [] #IDs of stories showed
 		self.activeFeeds = []
 
 class postObject:
@@ -72,17 +72,21 @@ def login(userID):
 	connected_users[userID] = user
 
 	# #Pull latest FB data 
-	update_facebook(userID)
+	update_facebook(user)
 
 	return jsonify({'result': 'login'}) #TODO : Add error checking and return payload
 
 @app.route('/api/refresh/<int:userID>', methods=['POST'])
 def send_refresh(userID):
 	user = connected_users[userID] #Fetch requesting user
-	#make GET request to FB API
-	#if any diff then return it
-	#else return nothing
-	return False #TODO: Return any diff in the user's feeds
+	#TODO: Switch statement for active feed types 
+	fb_update = update_facebook(user)
+	if 'reddit' in user.activeFeeds:
+		reddit_update = update_reddit(user)
+	if 'xkcd' in user.activeFeeds:
+		xkcd_update = update_xkcd(user)
+
+	return jsonify({'result': fb_update}) #TODO: add the diffs in other feeds
 
 @app.route('/api/update/<int:userID>/<string:feedType>', methods=['POST'])
 def update_feed(userID, feedType):
@@ -109,6 +113,7 @@ def has_user(userID):
 		return False #TODO: Check from database
 	user = userObject()
 	user.userID = userID
+	#TODO: load other fields from db
 	return user
 
 def add_user(userID):
@@ -121,8 +126,7 @@ def add_user(userID):
 def send_feed(userID, feedType):
 	return False #TODO: Check diff for specified feed 
 
-def update_facebook(userID):
-	user = connected_users[userID]
+def update_facebook(user):
 	fb_content = requests.get('https://graph.facebook.com/v2.3/me/feed?access_token=' + user.token).content
 	parsed_json = []
 	raw_json = json.loads(fb_content)
@@ -139,16 +143,15 @@ def update_facebook(userID):
 			post.link = 'https://www.facebook.com/{}/posts/{}?pnref=story'.format(post.id.split('_')[0], post.id.split('_')[1])
 			if 'picture' in obj:
 				post.picture = obj['picture']
-			print(post.link)
+
 			parsed_json.append(post)
 			user.fbStories.append(post.id)
 	return parsed_json
 
-def update_reddit(userID):
-	user = connected_users[userID]
+def update_reddit(user):
+	print(user)
 
-def update_xkcd(userID):
-	user = connected_users[userID]
+def update_xkcd(user):
 	page = urllib2.urlopen('http://xkcd.com/info.0.json')
 	cont = page.read()
 	obj = json.loads(cont)
@@ -180,6 +183,8 @@ def print_post(post):
 	print(post.time)
 	print(post.link)
 	print(post.picture)
+
+#TODO: Stringify function for posts in JSON format
 
 #====================================================================================
 #MARK: Main
