@@ -34,6 +34,9 @@ class postObject:
 		self.link = ''
 		self.picture = ''
 
+	def to_json(self):
+		return {"id": self.id, "source": self.source, "message": self.message, "time": self.time, "link": self.link, "picture": self.picture}
+
 connected_users = {}
 
 #====================================================================================
@@ -86,7 +89,7 @@ def send_refresh(userID):
 	if 'xkcd' in user.activeFeeds:
 		xkcd_update = update_xkcd(user)
 
-	return jsonify({'result': fb_update}) #TODO: add the diffs in other feeds
+	return json.dumps(fb_update) #TODO: add the diffs in other feeds
 
 @app.route('/api/update/<int:userID>/<string:feedType>', methods=['POST'])
 def update_feed(userID, feedType):
@@ -123,6 +126,14 @@ def add_user(userID):
 	cur.execute(query)
 	con.commit()
 
+def add_feed(userID):
+	con = get_db()
+	cur = con.cursor()
+	query = 'INSERT INTO users (user_id) VALUES ({})'.format(userID)
+	cur.execute(query)
+	con.commit()
+
+
 def send_feed(userID, feedType):
 	return False #TODO: Check diff for specified feed 
 
@@ -144,7 +155,7 @@ def update_facebook(user):
 			if 'picture' in obj:
 				post.picture = obj['picture']
 
-			parsed_json.append(post)
+			parsed_json.append(post.to_json())
 			user.fbStories.append(post.id)
 	return parsed_json
 
@@ -162,7 +173,7 @@ def update_xkcd(user):
 	post.id = obj['num'] ### THIS NEEDS TO BE CHANGED
 	post.link = "http://xkcd.com"
 	post.time = str(datetime.datetime.now())
-	parsed_json.append(post)
+	parsed_json.append(post.to_json())
 	user.xkcdFeed.append(post.id)
 	return parsed_json
 
