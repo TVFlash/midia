@@ -75,29 +75,42 @@ def login(userID):
 	connected_users[userID] = user
 
 	# #Pull latest FB data 
-	update_facebook(user)
+	print send_refresh(userID)
 
 	return jsonify({'result': 'login'}) #TODO : Add error checking and return payload
 
 @app.route('/api/refresh/<int:userID>', methods=['POST'])
 def send_refresh(userID):
 	user = connected_users[userID] #Fetch requesting user
-	#TODO: Switch statement for active feed types 
-	fb_update = update_facebook(user)
-	if 'reddit' in user.activeFeeds:
-		reddit_update = update_reddit(user)
-	if 'xkcd' in user.activeFeeds:
-		xkcd_update = update_xkcd(user)
+	#TODO: Pass update variable to update methods
+	#TODO: Make a swtich which adds to the update var in order of priority 
+	update = []
+	update = update_facebook(user, update)
+	for feed in user.activeFeeds:
+		if 'reddit' in user.activeFeeds:
+			update = update_reddit(user, update)
+		elif 'twitch' in user.activeFeeds:
+			update = update_twitch(user, update) #TODO: write method
+		elif 'twitter' in user.activeFeeds:
+			update = update_twitter(user, update)#TODO: write method
+		elif 'xkcd' in user.activeFeeds:
+			update = update_xkcd(user, update)
+		elif 'github' in user.activeFeeds:
+			update = update_twitch(user, update) #TODO: write method
+		elif 'hackernews' in user.activeFeeds:
+			update = update_twitter(user, update)#TODO: write method
 
-	return json.dumps(fb_update) #TODO: add the diffs in other feeds
+	return json.dumps(update) #TODO: add the diffs in other feeds
 
-@app.route('/api/update/<int:userID>/<string:feedType>', methods=['POST'])
-def update_feed(userID, feedType):
-	return False #TODO: Add / Change attributes to a feed
+@app.route('/api/update/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
+def update_feed(userID, feedType, feedSource):
+	add_feed(userID, feedType, feedSource)
+	#Refresh?
+	return jsonify({'result': 'success'}) #TODO: Add / Change attributes to a feed
 
-@app.route('/api/interaction/<int:userID>/<string:feedType>', methods=['POST'])
-def add_interaction(userID, feedType):
-	return False #TODO: Update the user's interaction count with a feed
+@app.route('/api/interaction/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
+def add_interaction(userID, feedType, feedSource):
+	return jsonify({'result': 'success'}) #TODO: Update the user's interaction count with a feed
 
 #====================================================================================
 #MARK: Helper functions
@@ -126,10 +139,21 @@ def add_user(userID):
 	cur.execute(query)
 	con.commit()
 
-def add_feed(userID):
+def add_feed(userID, feedType, feedSource):
 	con = get_db()
 	cur = con.cursor()
-	query = 'INSERT INTO users (user_id) VALUES ({})'.format(userID)
+	#Get current number of results
+	query = 'select array_dims(feeds) as count from users where user_id={}'.format(userID)
+	cur.execute(query)
+	con.commit()
+	dim = cur.fetchone()
+	item_count = 1
+
+	if dim[0] is not None:
+		item_count = int(dim[0].split(':')[1].split(']')[0]) + 1
+
+	#Update feeds array to include new row
+	query = """update users set feeds[{}] = ROW('{}','{}',0)::feed where user_id={}""".format(item_count, feedType, feedSource, userID)
 	cur.execute(query)
 	con.commit()
 
@@ -137,9 +161,8 @@ def add_feed(userID):
 def send_feed(userID, feedType):
 	return False #TODO: Check diff for specified feed 
 
-def update_facebook(user):
+def update_facebook(user, update):
 	fb_content = requests.get('https://graph.facebook.com/v2.3/me/feed?access_token=' + user.token).content
-	parsed_json = []
 	raw_json = json.loads(fb_content)
 	for obj in raw_json[u'data']:
 		if obj['id'] not in user.fbStories:
@@ -154,28 +177,43 @@ def update_facebook(user):
 			post.link = 'https://www.facebook.com/{}/posts/{}?pnref=story'.format(post.id.split('_')[0], post.id.split('_')[1])
 			if 'picture' in obj:
 				post.picture = obj['picture']
-
-			parsed_json.append(post.to_json())
+			update.append(post.to_json())
 			user.fbStories.append(post.id)
-	return parsed_json
+	return update
 
-def update_reddit(user):
+def update_reddit(user, update):
 	print(user)
+	return update
 
-def update_xkcd(user):
+def update_github(user, update):
+	print(user)
+	return update
+
+def update_twitch(user, update):
+	print(user)
+	return update
+
+def update_twitter(user, update):
+	print(user)
+	return update
+
+def update_hackernews(user, update):
+	print(user)
+	return update
+
+def update_xkcd(user, update):
 	page = urllib2.urlopen('http://xkcd.com/info.0.json')
 	cont = page.read()
 	obj = json.loads(cont)
-	parsed_json = []
 	post = postObject()
 	post.picture = obj['img']
 	post.source = 'xkcd' 
 	post.id = obj['num'] ### THIS NEEDS TO BE CHANGED
 	post.link = "http://xkcd.com"
 	post.time = str(datetime.datetime.now())
-	parsed_json.append(post.to_json())
+	update.append(post.to_json())
 	user.xkcdFeed.append(post.id)
-	return parsed_json
+	return update
 
 @app.before_first_request
 def establish_db_connection():
