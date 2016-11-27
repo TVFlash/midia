@@ -107,12 +107,45 @@ def send_refresh(userID):
 
 @app.route('/api/update/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
 def update_feed(userID, feedType, feedSource):
-	add_feed(userID, feedType, feedSource)
+	con = get_db()
+	cur = con.cursor()
+	#Get current number of results
+	query = 'SELECT array_dims(feeds) AS count FROM users WHERE user_id={}'.format(userID)
+	cur.execute(query)
+	con.commit()
+	dim = cur.fetchone()
+	item_count = 1
+
+	if dim[0] is not None:
+		item_count = int(dim[0].split(':')[1].split(']')[0]) + 1
+
+	#Update feeds array to include new row
+	query = """UPDATE users SET feeds[{}] = ROW('{}','{}',0)::feed WHERE user_id={}""".format(item_count, feedType, feedSource, userID)
+	cur.execute(query)
+	con.commit()
 	#Refresh?
 	return jsonify({'result': 'success'}) #TODO: Add / Change attributes to a feed
 
 @app.route('/api/interaction/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
 def add_interaction(userID, feedType, feedSource):
+	idx = 1
+	con = get_db()
+	cur = con.cursor()
+	query = 'SELECT feeds FROM users WHERE user_id={}'.format(userID)
+	cur.execute(query)
+	con.commit()
+	feeds = cur.fetchone()[0]
+	feeds = feeds[3:len(feeds) - 3].replace("\"","").split("),(") #Trim leading and trailing braces
+
+	for feed in feeds:
+		attributes = feed.split(",")
+		if attributes[0] == feedType and attributes[1] == feedSource:
+			query = """UPDATE users SET feeds[{}] = ROW('{}','{}',{})::feed WHERE user_id={}""".format(idx, feedType, feedSource, int(attributes[2]) + 1,userID)
+			cur.execute(query)
+			con.commit()
+		else: 
+			idx = idx + 1
+
 	return jsonify({'result': 'success'}) #TODO: Update the user's interaction count with a feed
 
 #====================================================================================
@@ -122,10 +155,8 @@ def add_interaction(userID, feedType, feedSource):
 def has_user(userID):
 	con = get_db()
 	cur = con.cursor()
-	query = 'SELECT * FROM users where user_id={}'.format(userID)
-
+	query = 'SELECT * FROM users WHERE user_id={}'.format(userID)
 	cur.execute(query)
-
 	con.commit()
 
 	if cur.rowcount == 0:
@@ -151,25 +182,6 @@ def add_user(userID):
 	query = 'INSERT INTO users (user_id) VALUES ({})'.format(userID)
 	cur.execute(query)
 	con.commit()
-
-def add_feed(userID, feedType, feedSource):
-	con = get_db()
-	cur = con.cursor()
-	#Get current number of results
-	query = 'select array_dims(feeds) as count from users where user_id={}'.format(userID)
-	cur.execute(query)
-	con.commit()
-	dim = cur.fetchone()
-	item_count = 1
-
-	if dim[0] is not None:
-		item_count = int(dim[0].split(':')[1].split(']')[0]) + 1
-
-	#Update feeds array to include new row
-	query = """update users set feeds[{}] = ROW('{}','{}',0)::feed where user_id={}""".format(item_count, feedType, feedSource, userID)
-	cur.execute(query)
-	con.commit()
-
 
 def send_feed(userID, feedType):
 	return False #TODO: Check diff for specified feed 
