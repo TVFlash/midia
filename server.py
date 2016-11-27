@@ -23,7 +23,7 @@ class userObject:
 		self.githubFeed = ''
 		self.hackerNewsFeed = ''
 		self.fbStories = [] #IDs of stories showed
-		self.activeFeeds = []
+		self.activeFeeds = {}
 
 class postObject:
 	def __init__(self):
@@ -75,30 +75,33 @@ def login(userID):
 	connected_users[userID] = user
 
 	# #Pull latest FB data 
-	print send_refresh(userID)
+	send_refresh(userID)
 
 	return jsonify({'result': 'login'}) #TODO : Add error checking and return payload
 
 @app.route('/api/refresh/<int:userID>', methods=['POST'])
 def send_refresh(userID):
 	user = connected_users[userID] #Fetch requesting user
-	#TODO: Pass update variable to update methods
-	#TODO: Make a swtich which adds to the update var in order of priority 
+	user_pref_feeds = []
+	if user.activeFeeds: 
+		user_pref_feeds = sorted(user.activeFeeds.items(), key=user.activeFeeds.get, reverse=True)
+	print user_pref_feeds
 	update = []
 	update = update_facebook(user, update)
-	for feed in user.activeFeeds:
-		if 'reddit' in user.activeFeeds:
+	for feed in user_pref_feeds:
+		feed = feed[0]
+		if feed == 'reddit':
 			update = update_reddit(user, update)
-		elif 'twitch' in user.activeFeeds:
+		elif feed == 'twitch':
 			update = update_twitch(user, update) #TODO: write method
-		elif 'twitter' in user.activeFeeds:
+		elif feed == 'twitter':
 			update = update_twitter(user, update)#TODO: write method
-		elif 'xkcd' in user.activeFeeds:
+		elif feed == 'xkcd':
 			update = update_xkcd(user, update)
-		elif 'github' in user.activeFeeds:
-			update = update_twitch(user, update) #TODO: write method
-		elif 'hackernews' in user.activeFeeds:
-			update = update_twitter(user, update)#TODO: write method
+		elif feed == 'github':
+			update = update_github(user, update) #TODO: write method
+		elif feed == 'hackernews':
+			update = update_hackernews(user, update)#TODO: write method
 
 	return json.dumps(update) #TODO: add the diffs in other feeds
 
@@ -126,9 +129,18 @@ def has_user(userID):
 	con.commit()
 
 	if cur.rowcount == 0:
-		return False #TODO: Check from database
+		return False
 	user = userObject()
 	user.userID = userID
+	feeds = cur.fetchone()[1]
+	feeds = feeds[3:len(feeds) - 3].replace("\"","").split("),(") #Trim leading and trailing braces
+	for feed in feeds:
+		attributes = feed.split(",")
+		if attributes[0] in user.activeFeeds:
+			user.activeFeeds[attributes[0]] = user.activeFeeds[attributes[0]] + int(attributes[2])
+		else:
+			user.activeFeeds[attributes[0]] = int(attributes[2])
+
 	#TODO: load other fields from db
 	return user
 
@@ -182,23 +194,23 @@ def update_facebook(user, update):
 	return update
 
 def update_reddit(user, update):
-	print(user)
+	print("reddit")
 	return update
 
 def update_github(user, update):
-	print(user)
+	print("github")
 	return update
 
 def update_twitch(user, update):
-	print(user)
+	print("twitch")
 	return update
 
 def update_twitter(user, update):
-	print(user)
+	print("twitter")
 	return update
 
 def update_hackernews(user, update):
-	print(user)
+	print("hackernews")
 	return update
 
 def update_xkcd(user, update):
