@@ -133,15 +133,16 @@ def has_user(userID):
 	user = userObject()
 	user.userID = userID
 	feeds = cur.fetchone()[1]
-	feeds = feeds[3:len(feeds) - 3].replace("\"","").split("),(") #Trim leading and trailing braces
-	for feed in feeds:
-		attributes = feed.split(",")
-		if attributes[0] in user.activeFeeds:
-			user.activeFeeds[attributes[0]] = user.activeFeeds[attributes[0]] + int(attributes[2])
-		else:
-			user.activeFeeds[attributes[0]] = int(attributes[2])
+	if feeds:
+		feeds = feeds[3:len(feeds) - 3].replace("\"","").split("),(") #Trim leading and trailing braces
+		for feed in feeds:
+			attributes = feed.split(",")
+			if attributes[0] in user.activeFeeds:
+				user.activeFeeds[attributes[0]] = user.activeFeeds[attributes[0]] + int(attributes[2])
+			else:
+				user.activeFeeds[attributes[0]] = int(attributes[2])
 
-	#TODO: load other fields from db
+		#TODO: load other fields from db
 	return user
 
 def add_user(userID):
