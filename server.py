@@ -6,8 +6,19 @@ import argparse
 import json
 import urllib2
 import datetime
+import twitter
+import unicodedata
 
 app = Flask(__name__)
+
+#creating twitter api object
+c_k = 'UiAYyZK2QftHv4QFN82aUwXtc'
+c_s = 'w9ExzHJCVZwEqtgty69vXZvrD3dxdPJyDNeIdqXY8mYPCHTggb'
+a_t = '1360754605-h7DdBbXf0ddSUSCBtJ6mk1xLSy8GHrc8ng5RF2h'
+a_s = 'xqvHvB0bul03IKdUmRhTLvQqlsT32KiHrP3p9vSoBYLrv'
+api = twitter.Api(consumer_key=c_k, consumer_secret=c_s, access_token_key=a_t, access_token_secret=a_s)
+
+
 
 #Database information
 password = '' 
@@ -24,6 +35,15 @@ class userObject:
 		self.hackerNewsFeed = ''
 		self.fbStories = [] #IDs of stories showed
 		self.activeFeeds = {}
+		#twitter objects
+		self.friends = api.GetFriends(screen_name='trox94') # NEED TO CHANGE THIS TO SET IT TO INPUT FROM FRONTEND
+		self.screens = []
+		self.mostrecent = {}
+		for x in self.friends:
+			self.screens.append(x.screen_name)
+		#twitch field
+		self.recentstream = ''
+
 
 class postObject:
 	def __init__(self):
@@ -215,11 +235,44 @@ def update_github(user, update):
 	return update
 
 def update_twitch(user, update):
+	ret = []  # list of twitch streams to return that went live since last update
+	tempurl = 'https://api.twitch.tv/kraken/users/trox94/follows/channels?response_type=token&limit=140&client_id=1pmqc0kf9rr5p3ku7s6ps6qezpav5d6&sortby=last_broadcast'
+	#NEED TO CHANGE THIS API CALL TO USE USERNAME FROM FRONTEND
+	contents = urllib2.urlopen(tempurl)
+	con = contents.read()
+	obj = json.loads(con)
+	#gets the list of following objects, sorted by last broadcast time
+
+	for i in range (0, 140):
+		st = obj['follows'][i]['channel']['display_name']
+		if user.mostrecent == '': # only happens on first call to update
+			user.mostrecent = st
+			ret.append(st)
+			break
+		if user.mostrecent == st: # found the most recent stream object from last update
+			break
+		else:
+			ret.append(st)  #stream that came online since last call to update
+			pass
 	print("twitch")
+	#want to return ret here
 	return update
 
 def update_twitter(user, update):
-	print("twitter")
+	ret = {} #ret is a hashmap, key = twitter username, value = text of tweet
+	for name in user.screens: #iterate over people you follow
+		statuses = api.GetUserTimeline(screen_name=name) #list of status objects for 'name'
+		message = unicodedata.normalize('NFKD', statuses[0].text).encode('ascii','ignore') #gets rid of weird characters
+		if name in user.mostrecent:
+			if message != user.mostrecent[name]:
+				user.mostrecent[name] = message #saves the most recent tweet from user 'name'
+				ret[name] = message # add the tweet to the response hash map
+		else:
+			user.mostrecent[name] = message #only happens on first update, just save most recent tweet
+
+	post = postObject()
+	#want to return ret here
+
 	return update
 
 def update_hackernews(user, update):
