@@ -51,7 +51,7 @@
 					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===true" ng-click="logoutFunc()" id="logout">Log out</button>
 
 
-					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===true" data-toggle="modal" data-target=".bs-example-modal-lg">Settings</button>
+					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===false" data-toggle="modal" data-target=".bs-example-modal-lg">Settings</button>
 					<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" class="hide">
 					  <div class="modal-dialog modal-lg" role="document">
 					    <div class="modal-content" align="left">				    
@@ -111,10 +111,14 @@
 	                					<label>Username</label>
 						                <input type="text" id="usernamefb" width="200px">
 						            </div>						  		
-						  		</li>				  		
+						  		</li>						  		
+							  	<div class="row" style="margin: 15px 15px 0px 15px">
+									<a href="http://www.facebook.com/signup">Change Password</a>
+									<button data-dismiss="modal" style="float: right; margin-left: 5px">Close</button>
+									<button style="float: right">Save Changes</button>
+								</div>				  		
 							</ul>
-							<div id="forgotPassword" class="help-block text-left"><a href="http://www.facebook.com/signup">Change Password</a></div>
-					    </div>
+							
 					  </div>
 					</div>
 					<!--temp-->
