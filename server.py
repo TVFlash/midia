@@ -3,6 +3,7 @@ from collections import namedtuple
 import psycopg2 as driver
 import requests
 import argparse
+import praw
 import json
 import urllib2
 import datetime
@@ -18,7 +19,10 @@ a_t = '1360754605-h7DdBbXf0ddSUSCBtJ6mk1xLSy8GHrc8ng5RF2h'
 a_s = 'xqvHvB0bul03IKdUmRhTLvQqlsT32KiHrP3p9vSoBYLrv'
 api = twitter.Api(consumer_key=c_k, consumer_secret=c_s, access_token_key=a_t, access_token_secret=a_s)
 
-
+#Bot objects
+user_agent = 'web:server:v.1 (by /u/TVFlash)'
+client_id = 'Nqf6SeqZFteU1A'
+reddit = praw.Reddit(user_agent=user_agent, client_id=client_id, client_secret=client_secret)
 
 #Database information
 password = '' 
@@ -35,6 +39,7 @@ class userObject:
 		self.hackerNewsFeed = ''
 		self.fbStories = [] #IDs of stories showed
 		self.activeFeeds = {}
+		self.feedSource = {}
 		#twitter objects
 		self.friends = api.GetFriends(screen_name='trox94') # NEED TO CHANGE THIS TO SET IT TO INPUT FROM FRONTEND
 		self.screens = []
@@ -123,7 +128,7 @@ def send_refresh(userID):
 		elif feed == 'hackernews':
 			update = update_hackernews(user, update)#TODO: write method
 
-	return json.dumps(update) #TODO: add the diffs in other feeds
+	return json.dumps(update, ensure_ascii=False)
 
 @app.route('/api/update/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
 def update_feed(userID, feedType, feedSource):
@@ -188,11 +193,21 @@ def has_user(userID):
 		feeds = feeds[3:len(feeds) - 3].replace("\"","").split("),(") #Trim leading and trailing braces
 		for feed in feeds:
 			attributes = feed.split(",")
-			if attributes[0] in user.activeFeeds:
-				user.activeFeeds[attributes[0]] = user.activeFeeds[attributes[0]] + int(attributes[2])
+			feed_type = attributes[0]
+			feed_source = attributes[1]
+			interact_count = attributes[2]
+			#Add feed sources to a list
+			if feed_type not in user.feedSource:
+				user.feedSource[feed_type] = []
+			
+			user.feedSource[feed_type].append(feed_source)
+			#keep track of interaction count per feed
+			if feed_type in user.activeFeeds:
+				user.activeFeeds[feed_type] = user.activeFeeds[feed_type] + int(interact_count)
 			else:
-				user.activeFeeds[attributes[0]] = int(attributes[2])
+				user.activeFeeds[feed_type] = int(interact_count)
 
+	print user.activeFeeds
 		#TODO: load other fields from db
 	return user
 
@@ -227,6 +242,15 @@ def update_facebook(user, update):
 	return update
 
 def update_reddit(user, update):
+	for subreddit in user.feedSource['reddit']:
+		for submission in reddit.subreddit(subreddit).hot(limit=5):
+			post = postObject()
+			post.id = submission.id
+			post.source = 'reddit'
+			post.message = submission.title
+			post.link = 'http://reddit.com{}'.format(submission.permalink)
+			post.picture = submission.url	
+			update.append(post.to_json()) 
 	print("reddit")
 	return update
 
