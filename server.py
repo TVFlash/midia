@@ -22,6 +22,7 @@ api = twitter.Api(consumer_key=c_k, consumer_secret=c_s, access_token_key=a_t, a
 #Bot objects
 user_agent = 'web:server:v.1 (by /u/TVFlash)'
 client_id = 'Nqf6SeqZFteU1A'
+client_secret = ''
 reddit = praw.Reddit(user_agent=user_agent, client_id=client_id, client_secret=client_secret)
 
 #Database information
