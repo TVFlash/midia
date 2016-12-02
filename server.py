@@ -33,7 +33,7 @@ class userObject:
 		self.token = ''
 		self.twitchFeed = ''
 		self.twitterFeed = ''
-		self.redditFeed = ''
+		self.redditFeed = []
 		self.xkcdFeed = []
 		self.githubFeed = ''
 		self.hackerNewsFeed = ''
@@ -206,9 +206,6 @@ def has_user(userID):
 				user.activeFeeds[feed_type] = user.activeFeeds[feed_type] + int(interact_count)
 			else:
 				user.activeFeeds[feed_type] = int(interact_count)
-
-	print user.activeFeeds
-		#TODO: load other fields from db
 	return user
 
 def add_user(userID):
@@ -244,14 +241,16 @@ def update_facebook(user, update):
 def update_reddit(user, update):
 	for subreddit in user.feedSource['reddit']:
 		for submission in reddit.subreddit(subreddit).hot(limit=5):
-			post = postObject()
-			post.id = submission.id
-			post.source = 'reddit'
-			post.message = submission.title
-			post.link = 'http://reddit.com{}'.format(submission.permalink)
-			post.picture = submission.url	
-			update.append(post.to_json()) 
-	print("reddit")
+			if submission.id not in user.redditFeed:
+				post = postObject()
+				post.id = submission.id
+				post.source = 'reddit'
+				post.message = submission.title
+				post.link = 'http://reddit.com{}'.format(submission.permalink)
+				post.picture = submission.url
+				post.time = submission.created_utc	
+				update.append(post.to_json())
+				user.redditFeed.append(post.id)
 	return update
 
 def update_github(user, update):
