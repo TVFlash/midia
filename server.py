@@ -3,6 +3,7 @@ from collections import namedtuple
 import psycopg2 as driver
 import requests
 import argparse
+import operator
 import praw
 import json
 import urllib2
@@ -36,7 +37,7 @@ class userObject:
 		self.twitterFeed = ''
 		self.redditFeed = []
 		self.xkcdFeed = []
-		self.githubFeed = ''
+		self.githubFeed = []
 		self.hackerNewsFeed = ''
 		self.fbStories = [] #IDs of stories showed
 		self.activeFeeds = {}
@@ -110,12 +111,11 @@ def send_refresh(userID):
 	user = connected_users[userID] #Fetch requesting user
 	user_pref_feeds = []
 	if user.activeFeeds: 
-		user_pref_feeds = sorted(user.activeFeeds.items(), key=user.activeFeeds.get, reverse=True)
-	print user_pref_feeds
+		user_pref_feeds = sorted(user.activeFeeds.items(), key=operator.itemgetter(1), reverse=True)
 	update = []
 	update = update_facebook(user, update)
 	for feed in user_pref_feeds:
-		feed = feed[0]
+		feed = feed[0] #Drop count from tuple
 		if feed == 'reddit':
 			update = update_reddit(user, update)
 		elif feed == 'twitch':
@@ -125,10 +125,9 @@ def send_refresh(userID):
 		elif feed == 'xkcd':
 			update = update_xkcd(user, update)
 		elif feed == 'github':
-			update = update_github(user, update) #TODO: write method
+			update = update_github(user, update)
 		elif feed == 'hackernews':
 			update = update_hackernews(user, update)#TODO: write method
-
 	return json.dumps(update, ensure_ascii=False)
 
 @app.route('/api/update/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
@@ -255,8 +254,31 @@ def update_reddit(user, update):
 	return update
 
 def update_github(user, update):
-	print("github")
-	return update
+	for username in user.feedSource['github']:
+		url = 'https://api.github.com/users/{}/received_events/public'.format(username)
+		gh_content = requests.get(url).content
+		raw_json = json.loads(gh_content)
+		for obj in raw_json:
+			if obj['id'] not in user.githubFeed:
+				post = postObject()
+				post.id = obj['id']
+				post.source = 'github'
+				action = ''
+				action_type = obj['type']
+				if action_type == 'WatchEvent':
+					action = ' watched'
+				elif action_type == 'ForkEvent':
+					action = ' forked'
+				elif action_type == 'PushEvent':
+					action = ' pushed to'
+				else:
+					print obj
+				post.message = obj['actor']['display_login'] + action + ' ' + obj['repo']['name']
+				post.time = obj['created_at']
+				post.picture = obj['actor']['avatar_url']
+				update.append(post.to_json())
+				user.githubFeed.append(post.id)
+		return update
 
 def update_twitch(user, update):
 	ret = []  # list of twitch streams to return that went live since last update
