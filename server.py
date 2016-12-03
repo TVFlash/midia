@@ -3,6 +3,8 @@ from collections import namedtuple
 import psycopg2 as driver
 import requests
 import argparse
+import operator
+import praw
 import json
 import urllib2
 import datetime
@@ -18,7 +20,11 @@ a_t = '1360754605-h7DdBbXf0ddSUSCBtJ6mk1xLSy8GHrc8ng5RF2h'
 a_s = 'xqvHvB0bul03IKdUmRhTLvQqlsT32KiHrP3p9vSoBYLrv'
 api = twitter.Api(consumer_key=c_k, consumer_secret=c_s, access_token_key=a_t, access_token_secret=a_s)
 
-
+#Bot objects
+user_agent = 'web:server:v.1 (by /u/TVFlash)'
+client_id = 'Nqf6SeqZFteU1A'
+client_secret = ''
+reddit = praw.Reddit(user_agent=user_agent, client_id=client_id, client_secret=client_secret)
 
 #Database information
 password = '' 
@@ -29,12 +35,13 @@ class userObject:
 		self.token = ''
 		self.twitchFeed = ''
 		self.twitterFeed = ''
-		self.redditFeed = ''
+		self.redditFeed = []
 		self.xkcdFeed = []
-		self.githubFeed = ''
+		self.githubFeed = []
 		self.hackerNewsFeed = ''
 		self.fbStories = [] #IDs of stories showed
 		self.activeFeeds = {}
+		self.feedSource = {}
 		#twitter objects
 		self.friends = api.GetFriends(screen_name='trox94') # NEED TO CHANGE THIS TO SET IT TO INPUT FROM FRONTEND
 		self.screens = []
@@ -104,12 +111,11 @@ def send_refresh(userID):
 	user = connected_users[userID] #Fetch requesting user
 	user_pref_feeds = []
 	if user.activeFeeds: 
-		user_pref_feeds = sorted(user.activeFeeds.items(), key=user.activeFeeds.get, reverse=True)
-	print user_pref_feeds
+		user_pref_feeds = sorted(user.activeFeeds.items(), key=operator.itemgetter(1), reverse=True)
 	update = []
 	update = update_facebook(user, update)
 	for feed in user_pref_feeds:
-		feed = feed[0]
+		feed = feed[0] #Drop count from tuple
 		if feed == 'reddit':
 			update = update_reddit(user, update)
 		elif feed == 'twitch':
@@ -119,11 +125,10 @@ def send_refresh(userID):
 		elif feed == 'xkcd':
 			update = update_xkcd(user, update)
 		elif feed == 'github':
-			update = update_github(user, update) #TODO: write method
+			update = update_github(user, update)
 		elif feed == 'hackernews':
 			update = update_hackernews(user, update)#TODO: write method
-
-	return json.dumps(update) #TODO: add the diffs in other feeds
+	return json.dumps(update, ensure_ascii=False)
 
 @app.route('/api/update/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
 def update_feed(userID, feedType, feedSource):
@@ -188,12 +193,19 @@ def has_user(userID):
 		feeds = feeds[3:len(feeds) - 3].replace("\"","").split("),(") #Trim leading and trailing braces
 		for feed in feeds:
 			attributes = feed.split(",")
-			if attributes[0] in user.activeFeeds:
-				user.activeFeeds[attributes[0]] = user.activeFeeds[attributes[0]] + int(attributes[2])
+			feed_type = attributes[0]
+			feed_source = attributes[1]
+			interact_count = attributes[2]
+			#Add feed sources to a list
+			if feed_type not in user.feedSource:
+				user.feedSource[feed_type] = []
+			
+			user.feedSource[feed_type].append(feed_source)
+			#keep track of interaction count per feed
+			if feed_type in user.activeFeeds:
+				user.activeFeeds[feed_type] = user.activeFeeds[feed_type] + int(interact_count)
 			else:
-				user.activeFeeds[attributes[0]] = int(attributes[2])
-
-		#TODO: load other fields from db
+				user.activeFeeds[feed_type] = int(interact_count)
 	return user
 
 def add_user(userID):
@@ -227,12 +239,46 @@ def update_facebook(user, update):
 	return update
 
 def update_reddit(user, update):
-	print("reddit")
+	for subreddit in user.feedSource['reddit']:
+		for submission in reddit.subreddit(subreddit).hot(limit=5):
+			if submission.id not in user.redditFeed:
+				post = postObject()
+				post.id = submission.id
+				post.source = 'reddit'
+				post.message = submission.title
+				post.link = 'http://reddit.com{}'.format(submission.permalink)
+				post.picture = submission.url
+				post.time = submission.created_utc	
+				update.append(post.to_json())
+				user.redditFeed.append(post.id)
 	return update
 
 def update_github(user, update):
-	print("github")
-	return update
+	for username in user.feedSource['github']:
+		url = 'https://api.github.com/users/{}/received_events/public'.format(username)
+		gh_content = requests.get(url).content
+		raw_json = json.loads(gh_content)
+		for obj in raw_json:
+			if obj['id'] not in user.githubFeed:
+				post = postObject()
+				post.id = obj['id']
+				post.source = 'github'
+				action = ''
+				action_type = obj['type']
+				if action_type == 'WatchEvent':
+					action = ' watched'
+				elif action_type == 'ForkEvent':
+					action = ' forked'
+				elif action_type == 'PushEvent':
+					action = ' pushed to'
+				else:
+					print obj
+				post.message = obj['actor']['display_login'] + action + ' ' + obj['repo']['name']
+				post.time = obj['created_at']
+				post.picture = obj['actor']['avatar_url']
+				update.append(post.to_json())
+				user.githubFeed.append(post.id)
+		return update
 
 def update_twitch(user, update):
 	ret = []  # list of twitch streams to return that went live since last update
