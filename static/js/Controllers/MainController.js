@@ -1,97 +1,77 @@
 app.controller('MainController', ['$scope', '$window', function($scope, $window) {
 
-	$scope.posts = [
+	$scope.displayLoadingGIF = true;
+	$scope.posts = [];
+	/*$scope.posts = [
 		{
-		img: '../static/img/joePic.jpg',
+		picture: '../static/img/joePic.jpg',
 		mainText: 'Joe Coy',
 		subText: '9 Likes and 4 Comments',
-		postText: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!',
-		timeStamp: '6h',
-		src: 'post'
+		message: 'Hey everyone, this is just an example of a post that we might put on Midia.  Most social media sights have some similarities between their posts at a base level, but there are some subtle and important differences too!',
+		time: '6h',
+		source: 'post'
 		},
 		{
-		img: '../static/img/grandmaPic.jpg',
+		picture: '../static/img/grandmaPic.jpg',
 		mainText: 'Rose Anne Coy',
 		subText: 'Playing Minecraft',
-		postText:'3,000 Viewers',
-		timeStamp:'10h',
-		src: 'twitch'
+		message:'3,000 Viewers',
+		time:'10h',
+		source: 'twitch'
 		},
 		{
-		img: '../static/img/joePic.jpg',
+		picture: '../static/img/joePic.jpg',
 		mainText: 'joeschmoe commit',
 		subText: '3 commits, 47+, 10-',
-		postText:'fixed CS490 project',
-		timeStamp:'2h',
-		src: 'github'
+		message:'fixed CS490 project',
+		time:'2h',
+		source: 'github'
 		},
 		{
-		img: '../static/img/michaelPic.jpg',
+		picture: '../static/img/michaelPic.jpg',
 		mainText: 'Michael Crabill\'s facebook picture',
 		subText: 'u/AmericanEagle r/funny',
-		postText:'Up: 30, Down: 40, 100 comments',
-		timeStamp:'1d',
-		src: 'reddit'
+		message:'Up: 30, Down: 40, 100 comments',
+		time:'1d',
+		source: 'reddit'
 		},
 		{
-		img: '../static/img/xkcdContent.png',
-		mainText: 'Purity Ranking',
-		subText: 'Permanent link to this comic: http://xkcd.com/435/',
-		postText:'Image URL (for hotlinking/embedding): http://imgs.xkcd.com/comics/purity.png',
-		timeStamp:'3d',
-		src: 'xkcd'
-		},
-		{
-		img: '../static/img/coreyPic.jpg',
-		mainText: 'Corey Pitzo',
-		subText: '@coreyLoLgod',
-		postText:'TSM4lyfe',
-		timeStamp:'3m',
-		src: 'twitter'
-		},
-		{
-		mainText: 'Facebook Q3 2016 Results',
-		subText: '23 points by tvincent',
-		timeStamp:'3h',
-		src: 'hackernews'
-		},
-		{
-		img: '../static/img/timPic.jpg',
+		picture: '../static/img/timPic.jpg',
 		mainText: 'Tim Vincent',
 		subText: '17 Likes and 5 Comments',
-		postText:'Just saw some amazing cute little puppers. They\'re gonna be doggos soon I bet.',
-		timeStamp:'7h'
+		message:'Just saw some amazing cute little puppers. They\'re gonna be doggos soon I bet.',
+		time:'7h'
 		},
 		{
-		img: '../static/img/coreyPic.jpg',
+		picture: '../static/img/coreyPic.jpg',
 		mainText: 'Corey Pitzo',
 		subText: '0 Likes and 1 Comments' ,
-		postText:'You know I think Taco Bell might be the greatest invention of all time.',
-		timeStamp:'4d'
+		message:'You know I think Taco Bell might be the greatest invention of all time.',
+		time:'4d'
 		},
 		{
-		img: '../static/img/pascalPic.jpg',
+		picture: '../static/img/pascalPic.jpg',
 		mainText: 'Pascal Lee',
 		subText: '23 Likes and 0 Comments',
-		postText:'Selling my Purdue football tickets, anyone want them?',
-		timeStamp:'1w'
+		message:'Selling my Purdue football tickets, anyone want them?',
+		time:'1w'
 		},
 		{
-		img: '../static/img/pascalPic.jpg',
+		picture: '../static/img/pascalPic.jpg',
 		mainText: 'Pascal Lee',
 		subText: '3 Likes and 0 Comments',
-		postText:'Still have the tickets',
-		timeStamp:'3d'
+		message:'Still have the tickets',
+		time:'3d'
 		},
 		{
-		img: '../static/img/pascalPic.jpg',
+		picture: '../static/img/pascalPic.jpg',
 		mainText: 'Pascal Lee',
 		subText: '1 Likes and 0 Comments',
-		postText:'Please someone just take them',
-		timeStamp:'1d'
+		message:'Please someone just take them',
+		time:'1d'
 		}
 
-	];
+	];*/
 
 	$scope.settingsData = {
 		
@@ -172,7 +152,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
        			$scope.$apply(function(){
 			    	$scope.userLoggedIn = true;
 			    	$scope.accountOne.name = response.name;
-			    	$scope.accountOne.id = response.ID;
+			    	
 			    });
      		});
 
@@ -248,6 +228,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 
   function loadUserData(user) {
     console.log("User : " + user.userID);
+    $scope.accountOne.id = user.userID;
     var pack = {}
     pack.token = user.accessToken
     $.ajax({
@@ -257,21 +238,25 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
       contentType: "application/json"
     }).done(function(data){
         console.log("[Request sent]")
+	getPageData();
     })
   }
 
   function getPageData(){
-  	$.ajax({
+    $.ajax({
       type: "POST", 
       url: "/api/refresh/" + $scope.accountOne.id,
       contentType: "application/json"
     }).done(function(data){
-        console.log("[Request sent]")
-        $scope.posts = $.parseJSON(data);
+        console.log("[Request sent for refresh]");
+        $scope.posts = $scope.posts.concat($.parseJSON(data));
+        console.log($scope.posts);
+        $scope.displayLoadingGIF = false;
+        $scope.$apply();
     })
   }
-  	//getPageData();
-	//setInterval(getPageData, 15*1000);
+
+	setInterval(getPageData, 15*1000);
 
 
 
