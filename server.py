@@ -60,9 +60,11 @@ class postObject:
 		self.time = ''
 		self.link = ''
 		self.picture = ''
+		self.twitchlive = []
+		self.tweets = {}
 
 	def to_json(self):
-		return {"id": self.id, "source": self.source, "message": self.message, "time": self.time, "link": self.link, "picture": self.picture}
+		return {"id": self.id, "source": self.source, "message": self.message, "time": self.time, "link": self.link, "picture": self.picture, "twitchlive": self.twitchlive, "tweets": self.tweets}
 
 connected_users = {}
 
@@ -301,6 +303,10 @@ def update_twitch(user, update):
 			ret.append(st)  #stream that came online since last call to update
 			pass
 	print("twitch")
+	post = postObject()
+	post.twitchlive = ret
+	update.append(post.to_json())
+
 	#want to return ret here
 	return update
 
@@ -317,7 +323,9 @@ def update_twitter(user, update):
 			user.mostrecent[name] = message #only happens on first update, just save most recent tweet
 
 	post = postObject()
+	post.tweets = ret
 	#want to return ret here
+	update.append(post.to_json())
 
 	return update
 
