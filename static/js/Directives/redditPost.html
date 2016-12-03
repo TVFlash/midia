@@ -1,7 +1,7 @@
 
 <div class="row bottom-section" style="padding-bottom: 20px;">
 <div class="col-xs-8">
-	<a class="block-link" href="https://www.facebook.com">
+	<a class="block-link" href="{{postInfo.link}}">
 		<div class="row-eq-height" style="background:#FFFFFF;">
 			   	<div class="col-xs-2 col-sm-2 col-md-1 side-panel" style="padding: 0px; background: #FF5C20">
 					<img ng-src="../static/img/redditIcon.png" alt="fbLogo" class="img-responsive" />
@@ -10,19 +10,19 @@
 
 			  		<div class="row post-section">
 				        <div class="col-xs-2 col-sm-2 col-md-1" style="padding-right: 0px; padding-left: 0px;">
-							<img ng-src="{{postInfo.img}}" style="height: auto; max-width: 75%;"/>
+							<img ng-src="{{postInfo.picture}}" style="height: auto; max-width: 75%;"/>
 							</div>
 						<div class="col-xs-9 col-sm-9 col-md-10" style=" padding-left: 0px;">
 				        	<font color="blue" size="4"><b>{{postInfo.mainText}}</b></font></br>
 							<font color="gray" size="2">{{postInfo.subText}}</font>
 				        </div>
 						<div class="col-xs-1 col-sm-1 col-md-1">
-							{{postInfo.timeStamp}}
+							{{postInfo.time}}
 						</div>
 			    	</div>
 					<div class="row"> 
 						<div class="col-xs-11 col-sm-11 col-md-11" style="padding-left: 0px;">
-							{{postInfo.postText}}
+							{{postInfo.message}}
 						</div>
 					</div>
 

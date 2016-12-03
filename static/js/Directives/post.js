@@ -9,13 +9,13 @@ app.directive('post', function(){
       //function used on the ng-include to resolve the template
       $scope.getTemplateUrl = function() {
         //basic handling
-        if ($scope.postInfo.src == "post")
+        if ($scope.postInfo.source == "post")
           return '../static/js/Directives/post.html';
-        else if ($scope.postInfo.src == "twitch")
+        else if ($scope.postInfo.source == "twitch")
           return '../static/js/Directives/twitchPost.html';
-	    else if ($scope.postInfo.src == "github")
+	    else if ($scope.postInfo.source == "github")
 	      return '../static/js/Directives/githubPost.html';
-	    else if ($scope.postInfo.src == "reddit")
+	    else if ($scope.postInfo.source == "reddit")
 	      return '../static/js/Directives/redditPost.html';
       	else 
       	  return '../static/js/Directives/post.html';
