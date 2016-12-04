@@ -60,8 +60,8 @@ class postObject:
 		self.time = ''
 		self.link = ''
 		self.picture = ''
-		self.twitchlive = []
-		self.tweets = {}
+		self.mainlabel = ''
+		self.sublabel = ''
 
 	def to_json(self):
 		return {"id": self.id, "source": self.source, "message": self.message, "time": self.time, "link": self.link, "picture": self.picture, "twitchlive": self.twitchlive, "tweets": self.tweets}
@@ -283,7 +283,7 @@ def update_github(user, update):
 		return update
 
 def update_twitch(user, update):
-	ret = []  # list of twitch streams to return that went live since last update
+	ret = ''  # list of twitch streams to return that went live since last update
 	tempurl = 'https://api.twitch.tv/kraken/users/trox94/follows/channels?response_type=token&limit=140&client_id=1pmqc0kf9rr5p3ku7s6ps6qezpav5d6&sortby=last_broadcast'
 	#NEED TO CHANGE THIS API CALL TO USE USERNAME FROM FRONTEND
 	contents = urllib2.urlopen(tempurl)
@@ -295,37 +295,37 @@ def update_twitch(user, update):
 		st = obj['follows'][i]['channel']['display_name']
 		if user.mostrecent == '': # only happens on first call to update
 			user.mostrecent = st
-			ret.append(st)
+			post = postObject()	
+			post.message = '<a href=\"' + st + '\"> just went live!'
+			update.append(post.to_json())
 			break
 		if user.mostrecent == st: # found the most recent stream object from last update
 			break
 		else:
-			ret.append(st)  #stream that came online since last call to update
+		#	ret.append(st)  #stream that came online since last call to update
+			post = postObject()	
+			post.message = '<a href=\"' + st + '\"> just went live!'
+			update.append(post.to_json())
 			pass
-	print("twitch")
-	post = postObject()
-	post.twitchlive = ret
-	update.append(post.to_json())
+#	print("twitch")
 
 	#want to return ret here
 	return update
 
 def update_twitter(user, update):
-	ret = {} #ret is a hashmap, key = twitter username, value = text of tweet
+	ret = '' #ret is a hashmap, key = twitter username, value = text of tweet
 	for name in user.screens: #iterate over people you follow
 		statuses = api.GetUserTimeline(screen_name=name) #list of status objects for 'name'
 		message = unicodedata.normalize('NFKD', statuses[0].text).encode('ascii','ignore') #gets rid of weird characters
 		if name in user.mostrecent:
 			if message != user.mostrecent[name]:
 				user.mostrecent[name] = message #saves the most recent tweet from user 'name'
-				ret[name] = message # add the tweet to the response hash map
+				finalmess = name + ' tweeted ' + message + '\n'
+				post = postObject()
+				post.message = finalmess
+				update.append(post.to_json())
 		else:
 			user.mostrecent[name] = message #only happens on first update, just save most recent tweet
-
-	post = postObject()
-	post.tweets = ret
-	#want to return ret here
-	update.append(post.to_json())
 
 	return update
 
