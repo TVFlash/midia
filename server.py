@@ -103,9 +103,6 @@ def login(userID):
 
 	connected_users[userID] = user
 
-	# #Pull latest FB data 
-	send_refresh(userID)
-
 	return jsonify({'result': 'login'}) #TODO : Add error checking and return payload
 
 @app.route('/api/refresh/<int:userID>', methods=['POST'])
@@ -174,6 +171,12 @@ def add_interaction(userID, feedType, feedSource):
 			idx = idx + 1
 
 	return jsonify({'result': 'success'}) #TODO: Update the user's interaction count with a feed
+
+@app.route('/api/feeds/<int:userID>', methods=['POST'])
+def get_feeds(userID):
+	user = connected_users[userID]
+	print json.dumps(user.feedSource)
+	return json.dumps(user.feedSource) 
 
 #====================================================================================
 #MARK: Helper functions
