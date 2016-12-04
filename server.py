@@ -64,7 +64,7 @@ class postObject:
 		self.sublabel = ''
 
 	def to_json(self):
-		return {"id": self.id, "source": self.source, "message": self.message, "time": self.time, "link": self.link, "picture": self.picture, "twitchlive": self.twitchlive, "tweets": self.tweets}
+		return {"id": self.id, "source": self.source, "message": self.message, "time": self.time, "link": self.link, "picture": self.picture}
 
 connected_users = {}
 
