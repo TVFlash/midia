@@ -43,11 +43,8 @@ class userObject:
 		self.activeFeeds = {}
 		self.feedSource = {}
 		#twitter objects
-		self.friends = api.GetFriends(screen_name='trox94') # NEED TO CHANGE THIS TO SET IT TO INPUT FROM FRONTEND
 		self.screens = []
 		self.mostrecent = {}
-		for x in self.friends:
-			self.screens.append(x.screen_name)
 		#twitch field
 		self.recentstream = ''
 
@@ -147,7 +144,13 @@ def update_feed(userID, feedType, feedSource):
 	query = """UPDATE users SET feeds[{}] = ROW('{}','{}',0)::feed WHERE user_id={}""".format(item_count, feedType, feedSource, userID)
 	cur.execute(query)
 	con.commit()
-	#Refresh?
+	#Refresh
+	user = connected_users[userID]
+	if feedType not in user.feedSource:
+		user.feedSource[feedType] = []
+
+	user.feedSource[feedType].append(feedSource)
+	user.activeFeeds[feedType] = 0
 	return jsonify({'result': 'success'}) #TODO: Add / Change attributes to a feed
 
 @app.route('/api/interaction/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
@@ -170,12 +173,13 @@ def add_interaction(userID, feedType, feedSource):
 		else: 
 			idx = idx + 1
 
+	user = connected_users[userID]
+	user.activeFeeds[feedType] = user.activeFeeds[feedType] + 1
 	return jsonify({'result': 'success'}) #TODO: Update the user's interaction count with a feed
 
 @app.route('/api/feeds/<int:userID>', methods=['POST'])
 def get_feeds(userID):
 	user = connected_users[userID]
-	print json.dumps(user.feedSource)
 	return json.dumps(user.feedSource) 
 
 #====================================================================================
@@ -211,6 +215,11 @@ def has_user(userID):
 				user.activeFeeds[feed_type] = user.activeFeeds[feed_type] + int(interact_count)
 			else:
 				user.activeFeeds[feed_type] = int(interact_count)
+
+			if feed_type == 'twitter':
+				user.friends = api.GetFriends(screen_name=feed_source)
+				for x in user.friends:
+					user.screens.append(x.screen_name)
 	return user
 
 def add_user(userID):
@@ -318,9 +327,11 @@ def update_twitch(user, update):
 def update_twitter(user, update):
 	ret = '' #ret is a hashmap, key = twitter username, value = text of tweet
 	for name in user.screens: #iterate over people you follow
+		print name
 		try:
 			statuses = api.GetUserTimeline(screen_name=name) #list of status objects for 'name'
 			message = unicodedata.normalize('NFKD', statuses[0].text).encode('ascii','ignore') #gets rid of weird characters
+			print '>>>>{}'.format(message)
 			if name in user.mostrecent:
 				if message != user.mostrecent[name]:
 					user.mostrecent[name] = message #saves the most recent tweet from user 'name'
