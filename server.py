@@ -43,6 +43,7 @@ class userObject:
 		self.activeFeeds = {}
 		self.feedSource = {}
 		#twitter objects
+		self.friends = ''
 		self.screens = []
 		self.mostrecent = {}
 		#twitch field
