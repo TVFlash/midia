@@ -315,18 +315,20 @@ def update_twitch(user, update):
 def update_twitter(user, update):
 	ret = '' #ret is a hashmap, key = twitter username, value = text of tweet
 	for name in user.screens: #iterate over people you follow
-		statuses = api.GetUserTimeline(screen_name=name) #list of status objects for 'name'
-		message = unicodedata.normalize('NFKD', statuses[0].text).encode('ascii','ignore') #gets rid of weird characters
-		if name in user.mostrecent:
-			if message != user.mostrecent[name]:
-				user.mostrecent[name] = message #saves the most recent tweet from user 'name'
-				finalmess = name + ' tweeted ' + message + '\n'
-				post = postObject()
-				post.message = finalmess
-				update.append(post.to_json())
-		else:
-			user.mostrecent[name] = message #only happens on first update, just save most recent tweet
-
+		try:
+			statuses = api.GetUserTimeline(screen_name=name) #list of status objects for 'name'
+			message = unicodedata.normalize('NFKD', statuses[0].text).encode('ascii','ignore') #gets rid of weird characters
+			if name in user.mostrecent:
+				if message != user.mostrecent[name]:
+					user.mostrecent[name] = message #saves the most recent tweet from user 'name'
+					finalmess = name + ' tweeted ' + message + '\n'
+					post = postObject()
+					post.message = finalmess
+					update.append(post.to_json())
+			else:
+				user.mostrecent[name] = message #only happens on first update, just save most recent tweet
+		except:
+			pass
 	return update
 
 def update_hackernews(user, update):
