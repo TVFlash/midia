@@ -49,7 +49,7 @@ class userObject:
 		self.screens = []
 		self.mostrecent = {}
 		#twitch field
-		self.recentstream = ''
+		self.twitchuser = ''
 
 
 class postObject:
@@ -223,6 +223,8 @@ def has_user(userID):
 				user.friends = api.GetFriends(screen_name=feed_source)
 				for x in user.friends:
 					user.screens.append(x.screen_name)
+			if feed_type == 'twitch':
+				user.twitchuser = feed_source
 	return user
 
 def add_user(userID):
@@ -298,7 +300,9 @@ def update_github(user, update):
 		return update
 
 def update_twitch(user, update):
-	tempurl = 'https://api.twitch.tv/kraken/users/trox94/follows/channels?response_type=token&limit=140&client_id=1pmqc0kf9rr5p3ku7s6ps6qezpav5d6&sortby=last_broadcast'
+	if user.twitchuser == '':
+		return update #twitch user uninitialized in user, back out
+	tempurl = 'https://api.twitch.tv/kraken/users/' + user.twitchuser +  '/follows/channels?response_type=token&limit=140&client_id=1pmqc0kf9rr5p3ku7s6ps6qezpav5d6&sortby=last_broadcast'
 	#NEED TO CHANGE THIS API CALL TO USE USERNAME FROM FRONTEND
 	contents = urllib2.urlopen(tempurl)
 	con = contents.read()
