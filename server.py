@@ -347,11 +347,9 @@ def update_twitch(user, update):
 def update_twitter(user, update):
 	ret = '' #ret is a hashmap, key = twitter username, value = text of tweet
 	for name in user.screens: #iterate over people you follow
-		print name
 		try:
 			statuses = api.GetUserTimeline(screen_name=name) #list of status objects for 'name'
 			message = unicodedata.normalize('NFKD', statuses[0].text).encode('ascii','ignore') #gets rid of weird characters
-			print '>>>>{}'.format(message)
 			if name in user.mostrecent:
 				if message != user.mostrecent[name]:
 					user.mostrecent[name] = message #saves the most recent tweet from user 'name'
@@ -370,9 +368,13 @@ def update_hackernews(user, update):
 
 	for story_id in hn.top_stories(limit=5):
 		post = postObject()
-		post.title = hn.get_item(story_id).title.encode('ascii', 'ignore')
-		post.time = str(hn.get_item(story_id).submission_time)
-		post.message = str(hn.get_item(story_id).score) + " points by " + hn.get_item(story_id).by
+		hn_story = hn.get_item(story_id)
+		message = hn_story.text
+
+		post.mainlabel = hn_story.title.encode('ascii', 'ignore')
+		post.time = str(hn_story.submission_time)
+		post.sub = str(hn_story.score) + " points by " + hn_story.by
+		post.message = message if message is not None else  "Read more"
 		post.source = 'hackernews'
 		post.link = "https://news.ycombinator.com/"
 		update.append(post.to_json())
