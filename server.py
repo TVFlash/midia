@@ -264,9 +264,11 @@ def update_reddit(user, update):
 				post = postObject()
 				post.id = submission.id
 				post.source = 'reddit'
-				post.message = submission.title
+				post.mainlabel = submission.title
+				post.sublabel = 'Points ' + str(submission.score )
+				post.message = submission.selftext if submission.selftext != '' else "Read more"
 				post.link = 'http://reddit.com{}'.format(submission.permalink)
-				post.picture = submission.url
+				post.picture = submission.thumbnail
 				post.time = submission.created_utc	
 				update.append(post.to_json())
 				user.redditFeed.append(post.id)
