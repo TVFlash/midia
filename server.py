@@ -10,6 +10,8 @@ import urllib2
 import datetime
 import twitter
 import unicodedata
+from hackernews import HackerNews
+
 
 app = Flask(__name__)
 
@@ -347,7 +349,16 @@ def update_twitter(user, update):
 	return update
 
 def update_hackernews(user, update):
-	print("hackernews")
+	hn = HackerNews()
+
+	for story_id in hn.top_stories(limit=5):
+		post = postObject()
+		post.title = hn.get_item(story_id).title.encode('ascii', 'ignore')
+		post.time = str(hn.get_item(story_id).submission_time)
+		post.message = str(hn.get_item(story_id).score) + " points by " + hn.get_item(story_id).by
+		post.source = 'hackernews'
+		post.link = "https://news.ycombinator.com/"
+		update.append(post.to_json())
 	return update
 
 def update_xkcd(user, update):
