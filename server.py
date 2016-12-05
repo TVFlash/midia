@@ -298,33 +298,46 @@ def update_github(user, update):
 		return update
 
 def update_twitch(user, update):
-	ret = ''  # list of twitch streams to return that went live since last update
 	tempurl = 'https://api.twitch.tv/kraken/users/trox94/follows/channels?response_type=token&limit=140&client_id=1pmqc0kf9rr5p3ku7s6ps6qezpav5d6&sortby=last_broadcast'
 	#NEED TO CHANGE THIS API CALL TO USE USERNAME FROM FRONTEND
 	contents = urllib2.urlopen(tempurl)
 	con = contents.read()
 	obj = json.loads(con)
-	#gets the list of following objects, sorted by last broadcast time
+	followed = []
+	#followed is a list of potential online streams, starts with all following initially, then only checks up till most recently checked
 
 	for i in range (0, 140):
 		st = obj['follows'][i]['channel']['display_name']
-		if user.mostrecent == '': # only happens on first call to update
-			user.mostrecent = st
-			post = postObject()	
-			post.message = '<a href=\"' + st + '\"> just went live!'
-			update.append(post.to_json())
-			break
 		if user.mostrecent == st: # found the most recent stream object from last update
 			break
 		else:
-		#	ret.append(st)  #stream that came online since last call to update
-			post = postObject()	
-			post.message = '<a href=\"' + st + '\"> just went live!'
-			update.append(post.to_json())
+			followed.append(st)
 			pass
-#	print("twitch")
+	
+	user.mostrecent = obj['follows'][0]['channel']['display_name'] # stores most recent stream to go online
+	if len(followed) == 0: #no new streams since last check
+		return update
 
-	#want to return ret here
+	offlinecount = 0
+	for stream in followed:
+		try:
+			url = 'https://api.twitch.tv/kraken/streams/' + stream + '?response_type=token&client_id=1pmqc0kf9rr5p3ku7s6ps6qezpav5d6'
+			contents = urllib2.urlopen(url)
+			con = contents.read()
+			obj = json.loads(con)
+			if obj['stream'] is not None:
+				post = postObject()	
+				post.message = '<a href=\"http://www.twitch.tv/' + st + '\"> just went live!'
+				update.append(post.to_json())
+				offlinecount = 0 #reset the counter
+			else:
+				offlinecount += 1	
+				if offlinecount >= 7: #encountered 7 consecutive offline streams before finding an online one
+					break
+		except:
+			pass
+		
+#	print("twitch")
 	return update
 
 def update_twitter(user, update):
