@@ -141,7 +141,6 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		if ($('#priorityfb').val().length > 0) {
 			console.log($('#priorityfb').val());
 			var pack = {
-				username: $scope.accountOne.name,
 				priority: $('#priorityfb').val()
 			}
 			$.ajax({
@@ -154,38 +153,83 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernametweet').val().length > 0) {
+		if ($('#usernametweet').val().length > 0 || $('#prioritytweet').val().length > 0) {
+			var pack = {
+				username: $('#usernametweet').val(),
+				priority: $('#prioritytweet').val()
+			}
+			$.ajax({
+		      type: "POST", 
+		      url: "/api/update/" + $scope.accountOne.id + "/twitter/" + $('#usernametweet').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
 			// make request here
 
 		}
-		if ($('#prioritytweet').val().length > 0) {
+		if ($('#usernametwitch').val().length > 0 || $('#prioritytwitch').val().length > 0) {
+			var pack = {
+				username: $('#usernametwitch').val(),
+				priority: $('#prioritytwitch').val()
+			}
+			$.ajax({
+		      type: "POST", 
+		      url: "/api/update/" + $scope.accountOne.id + "/twitch/" + $('#usernametwitch').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
 			// make request here
 		}
-		if ($('#usernametwitch').val().length > 0) {
+		if ($('#usernamegh').val().length > 0 || $('#prioritygh').val().length > 0) {
+			var pack = {
+				username: $('#usernamegh').val(),
+				priority: $('#prioritygh').val()
+			}
+			$.ajax({
+		      type: "POST", 
+		      url: "/api/update/" + $scope.accountOne.id + "/github/" + $('#usernamegh').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
 			// make request here
 		}
-		if ($('#prioritytwitch').val().length > 0) {
+		if ($('#usernamehn').val().length > 0 || $('#priorityhn').val().length > 0) {
+			var pack = {
+				username: $('#usernamehn').val(),
+				priority: $('#priorityhn').val()
+			}
+			$.ajax({
+		      type: "POST", 
+		      url: "/api/update/" + $scope.accountOne.id + "/hackernews/" + $('#usernamehn').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
 			// make request here
 		}
-		if ($('#usernamegh').val().length > 0) {
+		if ($('#usernamexkcd').val().length > 0 || $('#priorityxkcd').val().length > 0) {
+			var pack = {
+				username: $('#usernamexkcd').val(),
+				priority: $('#priorityxkcd').val()
+			}
+			$.ajax({
+		      type: "POST", 
+		      url: "/api/update/" + $scope.accountOne.id + "/xkcd/" + $('#usernamexkcd').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
 			// make request here
 		}
-		if ($('#prioritygh').val().length > 0) {
-			// make request here
-		}
-		if ($('#usernamehn').val().length > 0) {
-			// make request here
-		}
-		if ($('#priorityhn').val().length > 0) {
-			// make request here
-		}
-		if ($('#usernamexkcd').val().length > 0) {
-			// make request here
-		}
-		if ($('#priorityxkcd').val().length > 0) {
-			// make request here
-		}
-		if ($('#usernamereddit').val().length > 0) {
+		if ($('#usernamereddit').val().length > 0 || $('#priorityreddit').val().length > 0) {
 			// make request here
 			var pack = {
 				username: $('#usernamereddit').val(),
@@ -200,23 +244,6 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		        console.log("[Request sent]");
 		    })
 		}
-		if ($('#priorityreddit').val().length > 0) {
-			// make request here
-			var pack = {
-				username: $('#usernamereddit').val(),
-				priority: $('#priorityreddit').val()
-			}
-			$.ajax({
-		      type: "POST", 
-		      url: "/api/update/" + $scope.accountOne.id + "/reddit/" + $('#usernamereddit').val(),
-		      data: JSON.stringify(pack),
-		      contentType: "application/json"
-		    }).done(function(data){
-		        console.log("[Request sent]");
-		    })
-		}
-		
-		console.log("hello world");
 	};
 
   // This is called with the results from from FB.getLoginStatus().
