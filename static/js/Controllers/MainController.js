@@ -187,9 +187,33 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		}
 		if ($('#usernamereddit').val().length > 0) {
 			// make request here
+			var pack = {
+				username: $('#usernamereddit').val(),
+				priority: $('#priorityreddit').val()
+			}
+			$.ajax({
+		      type: "POST", 
+		      url: "/api/update/" + $scope.accountOne.id + "/reddit/" + $('#usernamereddit').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
 		}
 		if ($('#priorityreddit').val().length > 0) {
 			// make request here
+			var pack = {
+				username: $('#usernamereddit').val(),
+				priority: $('#priorityreddit').val()
+			}
+			$.ajax({
+		      type: "POST", 
+		      url: "/api/update/" + $scope.accountOne.id + "/reddit/" + $('#usernamereddit').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
 		}
 		
 		console.log("hello world");
