@@ -136,6 +136,65 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 	  },{scope:"user_status user_posts"});
 	};
 
+	$scope.saveFunc = function() {
+		// check all textboxes
+		if ($('#priorityfb').val().length > 0) {
+			console.log($('#priorityfb').val());
+			var pack = {
+				username: $scope.accountOne.name,
+				priority: $('#priorityfb').val()
+			}
+			$.ajax({
+		      type: "POST", 
+		      url: "/api/update/" + $scope.accountOne.id + "/facebook/" + $scope.accountOne.name,
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
+			// make request here
+		}
+		if ($('#usernametweet').val().length > 0) {
+			// make request here
+
+		}
+		if ($('#prioritytweet').val().length > 0) {
+			// make request here
+		}
+		if ($('#usernametwitch').val().length > 0) {
+			// make request here
+		}
+		if ($('#prioritytwitch').val().length > 0) {
+			// make request here
+		}
+		if ($('#usernamegh').val().length > 0) {
+			// make request here
+		}
+		if ($('#prioritygh').val().length > 0) {
+			// make request here
+		}
+		if ($('#usernamehn').val().length > 0) {
+			// make request here
+		}
+		if ($('#priorityhn').val().length > 0) {
+			// make request here
+		}
+		if ($('#usernamexkcd').val().length > 0) {
+			// make request here
+		}
+		if ($('#priorityxkcd').val().length > 0) {
+			// make request here
+		}
+		if ($('#usernamereddit').val().length > 0) {
+			// make request here
+		}
+		if ($('#priorityreddit').val().length > 0) {
+			// make request here
+		}
+		
+		console.log("hello world");
+	};
+
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -257,6 +316,9 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
   }
 
 	setInterval(getPageData, 15*1000);
+
+
+
 
 
 
