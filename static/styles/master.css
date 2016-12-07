@@ -1,6 +1,6 @@
 h2 {
     font-family: "Lucida Console", serif;
-	color: #edd736;
+	/*color: #edd736;*/
 }
 
 body {
@@ -9,12 +9,13 @@ body {
 }
 
 .top-section {
-	background-color: #ed1c24;
+	/*background-color: #ed1c24;*/
+	background: linear-gradient(#edd736, #ed1c24)
 }
 
 .bottom-section {
 	/*background-color: #edd736;*/
-	background-color: #f8f0b4
+	background-color: #e0e0e0;
   
 }
 
