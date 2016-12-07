@@ -55,6 +55,7 @@ class userObject:
 class postObject:
 	def __init__(self):
 		self.id = ''
+		self.type = ''
 		self.source = ''
 		self.message = ''
 		self.time = ''
@@ -244,10 +245,9 @@ def update_facebook(user, update):
 		if obj['id'] not in user.fbStories:
 			post = postObject()
 			post.id = obj['id']
-			post.source = 'facebook'
+			post.type = 'facebook'
 			post.mainlabel = 'Facebook'
 			post.sublabel = 'You posted:'
-			print post.mainlabel
 			if 'message' in obj:
 				post.message = obj['message']
 			else:
@@ -267,7 +267,8 @@ def update_reddit(user, update):
 			if submission.id not in user.redditFeed:
 				post = postObject()
 				post.id = submission.id
-				post.source = 'reddit'
+				post.type = 'reddit'
+				post.source =  subreddit
 				post.mainlabel = submission.title
 				post.sublabel = 'Points ' + str(submission.score )
 				post.message = submission.selftext if submission.selftext != '' else "Read more"
@@ -287,7 +288,8 @@ def update_github(user, update):
 			if obj['id'] not in user.githubFeed:
 				post = postObject()
 				post.id = obj['id']
-				post.source = 'github'
+				post.type = 'github'
+				post.source = username
 				action = ''
 				action_type = obj['type']
 				if action_type == 'WatchEvent':
@@ -337,6 +339,8 @@ def update_twitch(user, update):
 			obj = json.loads(con)
 			if obj['stream'] is not None:
 				post = postObject()	
+				post.type = 'twitch'
+				post.source = stream
 				post.message = '<a href=\"http://www.twitch.tv/' + st + '\"> just went live!'
 				update.append(post.to_json())
 				offlinecount = 0 #reset the counter
@@ -361,6 +365,8 @@ def update_twitter(user, update):
 					user.mostrecent[name] = message #saves the most recent tweet from user 'name'
 					finalmess = name + ' tweeted ' + message + '\n'
 					post = postObject()
+					post.type = 'twitter'
+					post.source = user.feedSource[post.type]
 					post.message = finalmess
 					update.append(post.to_json())
 			else:
@@ -381,7 +387,7 @@ def update_hackernews(user, update):
 		post.time = str(hn_story.submission_time)
 		post.sub = str(hn_story.score) + " points by " + hn_story.by
 		post.message = message if message is not None else  "Read more"
-		post.source = 'hackernews'
+		post.type = 'hackernews'
 		post.link = "https://news.ycombinator.com/"
 		update.append(post.to_json())
 	return update
