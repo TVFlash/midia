@@ -245,11 +245,15 @@ def update_facebook(user, update):
 			post = postObject()
 			post.id = obj['id']
 			post.source = 'facebook'
+			post.mainlabel = 'Facebook'
+			post.sublabel = 'You posted:'
+			print post.mainlabel
 			if 'message' in obj:
 				post.message = obj['message']
 			else:
 				post.message = obj['story']
 			post.time = obj['created_time']
+			post.time = post.time[:len(post.time) - 5]
 			post.link = 'https://www.facebook.com/{}/posts/{}?pnref=story'.format(post.id.split('_')[0], post.id.split('_')[1])
 			if 'picture' in obj:
 				post.picture = obj['picture']
