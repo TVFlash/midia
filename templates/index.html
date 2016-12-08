@@ -60,10 +60,12 @@
 								  			<img ng-src="../static/img/sideFB.jpg" alt="fbLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 15px">
+								  			<div style="height: 7px"></div>
 	                						<label>Priority (1-3)</label>						                	
 						                </div>
 						                <div style="float: left; margin-left: 10px; margin-top: 15px">
-						                	<input type="text" id="priorityfb" width="200px">
+						                	<button type="button" class="btn btn-default" id="priorityfb" ng-click="addfb()"><span class="glyphicon glyphicon-plus"></span></button>
+						                	
 						                </div>
 						            </div>						  		
 						  		</li>
@@ -75,13 +77,13 @@
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
 	                						<label>Username</label>
-	                						<div></div>
+	                						<div style="height: 7px"></div>
 	                						<label>Priority (1-3)</label>						                	
 						                </div>
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
-	                						<input type="text" id="usernametweet" width="200px">
+	                						<input type="text" id="usernametweet" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<input type="text" id="prioritytweet" width="200px">
+						                	<button type="button" class="btn btn-default" id="prioritytweet" ng-click="addtweet()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
@@ -93,13 +95,13 @@
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
 	                						<label>Username</label>
-	                						<div></div>
+	                						<div style="height: 7px"></div>
 	                						<label>Priority (1-3)</label>						                	
 						                </div>
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
-	                						<input type="text" id="usernametwitch" width="200px">
+	                						<input type="text" id="usernametwitch" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<input type="text" id="prioritytwitch" width="200px">
+						                	<button type="button" class="btn btn-default" id="prioritytwitch" ng-click="addtwitch()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
@@ -111,13 +113,13 @@
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
 	                						<label>Username</label>
-	                						<div></div>
+	                						<div style="height: 7px"></div>
 	                						<label>Priority (1-3)</label>						                	
 						                </div>
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
-	                						<input type="text" id="usernamegh" width="200px">
+	                						<input type="text" id="usernamegh" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<input type="text" id="prioritygh" width="200px">
+						                	<button type="button" class="btn btn-default" id="prioritygh" ng-click="addgh()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
@@ -129,13 +131,13 @@
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
 	                						<label>Username</label>
-	                						<div></div>
+	                						<div style="height: 7px"></div>
 	                						<label>Priority (1-3)</label>						                	
 						                </div>
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
-	                						<input type="text" id="usernamehn" width="200px">
+	                						<input type="text" id="usernamehn" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<input type="text" id="priorityhn" width="200px">
+						                	<button type="button" class="btn btn-default" id="priorityhn" ng-click="addhn()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
@@ -147,13 +149,13 @@
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
 	                						<label>Username</label>
-	                						<div></div>
+	                						<div style="height: 7px"></div>
 	                						<label>Priority (1-3)</label>						                	
 						                </div>
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
-	                						<input type="text" id="usernamexkcd" width="200px">
+	                						<input type="text" id="usernamexkcd" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<input type="text" id="priorityxkcd" width="200px">
+						                	<button type="button" class="btn btn-default" id="priorityxkcd" ng-click="addxkcd()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
@@ -165,13 +167,13 @@
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
 	                						<label>Username</label>
-	                						<div></div>
+	                						<div style="height: 7px"></div>
 	                						<label>Priority (1-3)</label>						                	
 						                </div>
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
-	                						<input type="text" id="usernamereddit" width="200px">
+	                						<input type="text" id="usernamereddit" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<input type="text" id="priorityreddit" width="200px">
+						                	<button type="button" class="btn btn-default" id="priorityreddit" ng-click="addreddit()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>

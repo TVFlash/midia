@@ -139,7 +139,6 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 	$scope.saveFunc = function() {
 		// check all textboxes
 		if ($('#priorityfb').val().length > 0) {
-			console.log($('#priorityfb').val());
 			var pack = {
 				priority: $('#priorityfb').val()
 			}
@@ -153,10 +152,9 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernametweet').val().length > 0 || $('#prioritytweet').val().length > 0) {
+		if ($('#usernametweet').val().length > 0) {
 			var pack = {
-				username: $('#usernametweet').val(),
-				priority: $('#prioritytweet').val()
+				username: $('#usernametweet').val()
 			}
 			$.ajax({
 		      type: "POST", 
@@ -169,10 +167,9 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 			// make request here
 
 		}
-		if ($('#usernametwitch').val().length > 0 || $('#prioritytwitch').val().length > 0) {
+		if ($('#usernametwitch').val().length > 0) {
 			var pack = {
-				username: $('#usernametwitch').val(),
-				priority: $('#prioritytwitch').val()
+				username: $('#usernametwitch').val()
 			}
 			$.ajax({
 		      type: "POST", 
@@ -184,10 +181,9 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernamegh').val().length > 0 || $('#prioritygh').val().length > 0) {
+		if ($('#usernamegh').val().length > 0) {
 			var pack = {
-				username: $('#usernamegh').val(),
-				priority: $('#prioritygh').val()
+				username: $('#usernamegh').val()
 			}
 			$.ajax({
 		      type: "POST", 
@@ -199,10 +195,9 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernamehn').val().length > 0 || $('#priorityhn').val().length > 0) {
+		if ($('#usernamehn').val().length > 0) {
 			var pack = {
-				username: $('#usernamehn').val(),
-				priority: $('#priorityhn').val()
+				username: $('#usernamehn').val()
 			}
 			$.ajax({
 		      type: "POST", 
@@ -214,10 +209,9 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernamexkcd').val().length > 0 || $('#priorityxkcd').val().length > 0) {
+		if ($('#usernamexkcd').val().length > 0) {
 			var pack = {
-				username: $('#usernamexkcd').val(),
-				priority: $('#priorityxkcd').val()
+				username: $('#usernamexkcd').val()
 			}
 			$.ajax({
 		      type: "POST", 
@@ -229,11 +223,10 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernamereddit').val().length > 0 || $('#priorityreddit').val().length > 0) {
+		if ($('#usernamereddit').val().length > 0) {
 			// make request here
 			var pack = {
-				username: $('#usernamereddit').val(),
-				priority: $('#priorityreddit').val()
+				username: $('#usernamereddit').val()
 			}
 			$.ajax({
 		      type: "POST", 
@@ -245,6 +238,91 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 		}
 	};
+
+	$scope.addfb = function() {
+		var pack = {}
+		$.ajax({
+		      type: "POST", 
+		      url: "/api/interaction/" + $scope.accountOne.id + "/facebook/" + $scope.accountOne.name,
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
+	}
+
+	$scope.addtweet = function() {
+		var pack = {}
+		$.ajax({
+		      type: "POST", 
+		      url: "/api/interaction/" + $scope.accountOne.id + "/twitter/" + $('#usernametweet').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
+	}
+
+	$scope.addtwitch = function() {
+		var pack = {}
+		$.ajax({
+		      type: "POST", 
+		      url: "/api/interaction/" + $scope.accountOne.id + "/twitch/" + $('#usernametwitch').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
+	}
+
+	$scope.addgh = function() {
+		var pack = {}
+		$.ajax({
+		      type: "POST", 
+		      url: "/api/interaction/" + $scope.accountOne.id + "/github/" + $('#usernamegh').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
+	}
+
+	$scope.addhn = function() {
+		console.log("/api/interaction/" + $scope.accountOne.id + "/hackernews/" + $('#usernamehn').val());
+		var pack = {}
+		$.ajax({
+		      type: "POST", 
+		      url: "/api/interaction/" + $scope.accountOne.id + "/hackernews/" + $('#usernamehn').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
+	}
+
+	$scope.addxkcd = function() {
+		var pack = {}
+		$.ajax({
+		      type: "POST", 
+		      url: "/api/interaction/" + $scope.accountOne.id + "/xkcd/" + $('#usernamexkcd').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
+	}
+
+	$scope.addreddit = function() {
+		var pack = {}
+		$.ajax({
+		      type: "POST", 
+		      url: "/api/interaction/" + $scope.accountOne.id + "/reddit/" + $('#usernamereddit').val(),
+		      data: JSON.stringify(pack),
+		      contentType: "application/json"
+		    }).done(function(data){
+		        console.log("[Request sent]");
+		    })
+	}
 
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
@@ -367,8 +445,6 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
   }
 
 	setInterval(getPageData, 15*1000);
-
-
 
 
 
