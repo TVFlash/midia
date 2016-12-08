@@ -191,7 +191,7 @@
 					<!--temp-->
 
 					<div ng-show="userLoggedIn===true">
-						<account info="accountOne">
+						<account info="accountOne" addFunction="">
 						</account>
 					</div>
 					<settings info="settingsData" ng-show="userLoggedIn===true">
@@ -201,6 +201,7 @@
 			
 		</div>
 	    <div class="container-fluid">
+	    	<img src="../static/img/loading.gif" ng-show="displayLoadingGIF===true" class="img-responsive center-block">
 	    	<div class="card" ng-repeat="pst in posts">
 	          <post info="pst">
 
