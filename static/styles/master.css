@@ -19,6 +19,16 @@ body {
   
 }
 
+.btn-primary{
+	background-color: transparent;
+	color: white;
+}
+
+.btn-primary:hover {
+	background-color: white;
+	color: #edd736;
+}
+
 .post-section {
 	background-color: #ffffff;
 }
