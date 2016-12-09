@@ -138,6 +138,15 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 	  },{scope:"user_status user_posts"});
 	};
 
+
+	var prevtweet = "";
+	var prevtwitch = "";
+	var prevgh = "";
+	var prevhn = "";
+	var prevxkcd = "";
+	var prevreddit = "";
+
+
 	$scope.saveFunc = function() {
 		// check all textboxes
 		// if ($('#priorityfb').val().length > 0) {
@@ -239,6 +248,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		        console.log("[Request sent]");
 		    })
 		}
+		getPageData();
 		console.log($('#togglefb').prop('checked'));
 	};
 
@@ -450,25 +460,25 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
         $scope.posts = $scope.posts.concat($.parseJSON(data));
 
         for (i = 0; i < $scope.posts.length; i++) {
-        	if ($('#togglefb').prop('checked') == false && #scope.posts[i].type == 'facebook') {
+        	if ($('#togglefb').prop('checked') == false && $scope.posts[i].type == 'facebook') {
         		delete $scope.posts[i];
         	}
-        	if ($('#toggletweet').prop('checked') == false && #scope.posts[i].type == 'twitter') {
+        	if ($('#toggletweet').prop('checked') == false && $scope.posts[i].type == 'twitter') {
         		delete $scope.posts[i];
         	}
-        	if ($('#toggletwitch').prop('checked') == false && #scope.posts[i].type == 'twitch') {
+        	if ($('#toggletwitch').prop('checked') == false && $scope.posts[i].type == 'twitch') {
         		delete $scope.posts[i];
         	}
-        	if ($('#togglegh').prop('checked') == false && #scope.posts[i].type == 'github') {
+        	if ($('#togglegh').prop('checked') == false && $scope.posts[i].type == 'github') {
         		delete $scope.posts[i];
         	}
-        	if ($('#togglehn').prop('checked') == false && #scope.posts[i].type == 'hackernews') {
+        	if ($('#togglehn').prop('checked') == false && $scope.posts[i].type == 'hackernews') {
         		delete $scope.posts[i];
         	}
-        	if ($('#togglexkcd').prop('checked') == false && #scope.posts[i].type == 'xkcd') {
+        	if ($('#togglexkcd').prop('checked') == false && $scope.posts[i].type == 'xkcd') {
         		delete $scope.posts[i];
         	}
-        	if ($('#togglereddit').prop('checked') == false && #scope.posts[i].type == 'reddit') {
+        	if ($('#togglereddit').prop('checked') == false && $scope.posts[i].type == 'reddit') {
         		delete $scope.posts[i];
         	}
         }
