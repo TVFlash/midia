@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, url_for, render_template, g 
 from collections import namedtuple
+from random import shuffle
 import psycopg2 as driver
 import requests
 import argparse
@@ -40,7 +41,7 @@ class userObject:
 		self.redditFeed = []
 		self.xkcdFeed = []
 		self.githubFeed = []
-		self.hackerNewsFeed = ''
+		self.hackerNewsFeed = []
 		self.fbStories = [] #IDs of stories showed
 		self.activeFeeds = {}
 		self.feedSource = {}
@@ -105,8 +106,6 @@ def login(userID):
 	connected_users[userID] = user
 	if user.userID == 1379847898693831:
 		return jsonify({'picture': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/602182_1206447199367236_4235417433582915679_n.jpg?oh=4c8f464417f0373efa0221dc9da4e5c9&oe=58BE0C7A'})
-	if user.userID == 1379847898693831:
-		return jsonify({'picture': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/14333601_10210931064219419_3312308635401010677_n.jpg?oh=1fabb425bcb9ef420f87b626a685dd11&oe=58B1D49C'})
 	if user.userID == 1517929204900960:
 		return jsonify({'picture': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/14022262_1443956868964861_2652181416555563517_n.jpg?oh=1d6bc3e443654a2f0e5efb78b32cc2af&oe=58EC3A00'}) 
 	if user.userID == 1423056431053053:
@@ -119,23 +118,42 @@ def send_refresh(userID):
 	user_pref_feeds = []
 	if user.activeFeeds: 
 		user_pref_feeds = sorted(user.activeFeeds.items(), key=operator.itemgetter(1), reverse=True)
+	strata_line = len(user_pref_feeds)/ 2  if user.activeFeeds is not None else 0
+	strata_idx = 0
+	print strata_line
+	upper_strata = []
+	lower_strata = []
 	update = []
 	update = update_facebook(user, update)
 	for feed in user_pref_feeds:
+		strata_idx = strata_idx + 1
 		feed = feed[0] #Drop count from tuple
 		if feed == 'reddit':
 			update = update_reddit(user, update)
 		elif feed == 'twitch':
-			update = update_twitch(user, update) #TODO: write method
+			update = update_twitch(user, update)
 		elif feed == 'twitter':
-			update = update_twitter(user, update)#TODO: write method
+			update = update_twitter(user, update)
 		elif feed == 'xkcd':
 			update = update_xkcd(user, update)
 		elif feed == 'github':
 			update = update_github(user, update)
 		elif feed == 'hackernews':
-			update = update_hackernews(user, update)#TODO: write method
-	return json.dumps(update, ensure_ascii=False)
+			update = update_hackernews(user, update)
+		if strata_idx == strata_line:
+			shuffle(update)
+			upper_strata = update
+			update = []
+	
+	if strata_line > 0:
+		shuffle(update)
+		lower_strata = update
+		upper_strata.extend(lower_strata)
+
+	else:
+		upper_strata = update	
+
+	return json.dumps(upper_strata, ensure_ascii=False)
 
 @app.route('/api/update/<int:userID>/<string:feedType>/<string:feedSource>', methods=['POST'])
 def update_feed(userID, feedType, feedSource):
@@ -270,7 +288,7 @@ def update_facebook(user, update):
 
 def update_reddit(user, update):
 	for subreddit in user.feedSource['reddit']:
-		for submission in reddit.subreddit(subreddit).hot(limit=5):
+		for submission in reddit.subreddit(subreddit).hot(limit=15):
 			if submission.id not in user.redditFeed:
 				post = postObject()
 				post.id = submission.id
@@ -378,6 +396,8 @@ def update_twitter(user, update):
 					user.mostrecent[name] = message #saves the most recent tweet from user 'name'
 					finalmess = name + ' tweeted ' + message + '\n'
 					post = postObject()
+					post.mainlabel = 'Twitter'
+					post.sublabel = '@{}'.format(name)
 					post.type = 'twitter'
 					post.source = user.feedSource[post.type]
 					post.message = finalmess
@@ -391,7 +411,7 @@ def update_twitter(user, update):
 def update_hackernews(user, update):
 	hn = HackerNews()
 
-	for story_id in hn.top_stories(limit=5):
+	for story_id in hn.top_stories(limit=15):
 		post = postObject()
 		hn_story = hn.get_item(story_id)
 		message = hn_story.text
@@ -402,7 +422,9 @@ def update_hackernews(user, update):
 		post.message = message if message is not None else  "Read more"
 		post.type = 'hackernews'
 		post.link = "https://news.ycombinator.com/"
-		update.append(post.to_json())
+		if post.mainlabel not in user.hackerNewsFeed:
+			update.append(post.to_json())
+			user.hackerNewsFeed.append(post.mainlabel)
 	return update
 
 def update_xkcd(user, update):
@@ -416,8 +438,9 @@ def update_xkcd(user, update):
 	post.id = obj['num'] ### THIS NEEDS TO BE CHANGED
 	post.link = "http://xkcd.com"
 	post.time = str(datetime.datetime.now())
-	update.append(post.to_json())
-	user.xkcdFeed.append(post.id)
+	if post.id not in user.xkcdFeed:
+		update.append(post.to_json())
+		user.xkcdFeed.append(post.id)
 	return update
 
 @app.before_first_request
