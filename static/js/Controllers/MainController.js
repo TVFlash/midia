@@ -260,10 +260,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 		}
 		getPageData();
-<<<<<<< HEAD
 		console.log($('#togglefb').prop('checked'));
-=======
->>>>>>> origin/master
 	};
 
 	$scope.addfb = function() {
