@@ -103,8 +103,15 @@ def login(userID):
 		user.token = token
 
 	connected_users[userID] = user
-
-	return jsonify({'result': 'login'}) #TODO : Add error checking and return payload
+	if user.userID == 1379847898693831:
+		return jsonify({'picture': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/602182_1206447199367236_4235417433582915679_n.jpg?oh=4c8f464417f0373efa0221dc9da4e5c9&oe=58BE0C7A'})
+	if user.userID == 1379847898693831:
+		return jsonify({'picture': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/14333601_10210931064219419_3312308635401010677_n.jpg?oh=1fabb425bcb9ef420f87b626a685dd11&oe=58B1D49C'})
+	if user.userID == 1517929204900960:
+		return jsonify({'picture': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/14022262_1443956868964861_2652181416555563517_n.jpg?oh=1d6bc3e443654a2f0e5efb78b32cc2af&oe=58EC3A00'}) 
+	if user.userID == 1423056431053053:
+			return jsonify({'picture': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/942280_1214650845226947_7957939453920290600_n.jpg?oh=0652f2bec4acace0b5570787d77313f1&oe=58EF1C0A'})
+	return jsonify({'picture': 'None'}) 
 
 @app.route('/api/refresh/<int:userID>', methods=['POST'])
 def send_refresh(userID):
@@ -280,8 +287,11 @@ def update_reddit(user, update):
 	return update
 
 def update_github(user, update):
+	cid = 'd82b3dc16fd177dc3f7d'
+	sec = '71e8e9247baf1a485e4cf3bcd3d5ff7088ecce4e'
+
 	for username in user.feedSource['github']:
-		url = 'https://api.github.com/users/{}/received_events/public'.format(username)
+		url = 'https://api.github.com/users/{}/received_events/public?client_id={}&client_secret={}'.format(username, cid, sec)
 		gh_content = requests.get(url).content
 		raw_json = json.loads(gh_content)
 		for obj in raw_json:
@@ -290,6 +300,7 @@ def update_github(user, update):
 				post.id = obj['id']
 				post.type = 'github'
 				post.source = username
+
 				action = ''
 				action_type = obj['type']
 				if action_type == 'WatchEvent':
@@ -300,7 +311,9 @@ def update_github(user, update):
 					action = ' pushed to'
 				else:
 					print obj
-				post.message = obj['actor']['display_login'] + action + ' ' + obj['repo']['name']
+				post.mainlabel = 'GitHub'
+				post.sublabel = obj['actor']['display_login'] + action + ' ' + obj['repo']['name']
+				post.message = 'Read me'
 				post.time = obj['created_at']
 				post.picture = obj['actor']['avatar_url']
 				update.append(post.to_json())
@@ -385,7 +398,7 @@ def update_hackernews(user, update):
 
 		post.mainlabel = hn_story.title.encode('ascii', 'ignore')
 		post.time = str(hn_story.submission_time)
-		post.sub = str(hn_story.score) + " points by " + hn_story.by
+		post.sublabel = str(hn_story.score) + " points by " + hn_story.by
 		post.message = message if message is not None else  "Read more"
 		post.type = 'hackernews'
 		post.link = "https://news.ycombinator.com/"
@@ -397,8 +410,9 @@ def update_xkcd(user, update):
 	cont = page.read()
 	obj = json.loads(cont)
 	post = postObject()
+	post.mainlabel = 'XKCD'
 	post.picture = obj['img']
-	post.source = 'xkcd' 
+	post.type = 'xkcd' 
 	post.id = obj['num'] ### THIS NEEDS TO BE CHANGED
 	post.link = "http://xkcd.com"
 	post.time = str(datetime.datetime.now())
