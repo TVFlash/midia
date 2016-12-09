@@ -163,7 +163,11 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		//     })
 		// 	// make request here
 		// }
-		if ($('#usernametweet').val().length > 0) {
+
+
+
+		if ($('#usernametweet').val().length > 0 && $('#usernametweet').val() != prevtweet) {
+			prevtweet = $('#usernametweet').val();
 			var pack = {
 				username: $('#usernametweet').val()
 			}
@@ -178,7 +182,8 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 			// make request here
 
 		}
-		if ($('#usernametwitch').val().length > 0) {
+		if ($('#usernametwitch').val().length > 0 && $('#usernametwitch').val() != prevtwitch) {
+			prevtwitch = $('#usernametwitch').val();
 			var pack = {
 				username: $('#usernametwitch').val()
 			}
@@ -192,7 +197,8 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernamegh').val().length > 0) {
+		if ($('#usernamegh').val().length > 0 && $('#usernamegh').val() != prevgh) {
+			prevgh = $('#usernamegh').val();
 			var pack = {
 				username: $('#usernamegh').val()
 			}
@@ -206,7 +212,8 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernamehn').val().length > 0) {
+		if ($('#usernamehn').val().length > 0 && $('#usernamehn').val() != prevhn) {
+			prevhn = $('#usernamehn').val();
 			var pack = {
 				username: $('#usernamehn').val()
 			}
@@ -220,7 +227,8 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernamexkcd').val().length > 0) {
+		if ($('#usernamexkcd').val().length > 0 && $('#usernamexkcd').val() != prevxkcd) {
+			prevxkcd = $('#usernamexkcd').val();
 			var pack = {
 				username: $('#usernamexkcd').val()
 			}
@@ -234,7 +242,8 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 			// make request here
 		}
-		if ($('#usernamereddit').val().length > 0) {
+		if ($('#usernamereddit').val().length > 0 && $('#usernamereddit').val() != prevreddit) {
+			prevreddit = $('#usernamereddit').val();
 			// make request here
 			var pack = {
 				username: $('#usernamereddit').val()
@@ -249,7 +258,6 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		    })
 		}
 		getPageData();
-		console.log($('#togglefb').prop('checked'));
 	};
 
 	$scope.addfb = function() {
