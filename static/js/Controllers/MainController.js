@@ -1,6 +1,7 @@
 app.controller('MainController', ['$scope', '$window', function($scope, $window) {
 
 	$scope.displayLoadingGIF = true;
+	$scope.errorCount = 0;
 	$scope.posts = [];
 	/*$scope.posts = [
 		{
@@ -435,7 +436,14 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
     $.ajax({
       type: "POST", 
       url: "/api/refresh/" + $scope.accountOne.id,
-      contentType: "application/json"
+      contentType: "application/json",
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+       		$scope.errorCount++;
+     		$scope.$apply();
+     		if($scope.errorCount >= 3){
+     			clearInterval($scope.intervalId);
+     		}
+  	}
     }).done(function(data){
         console.log("[Request sent for refresh]");
         $scope.posts = $scope.posts.concat($.parseJSON(data));
@@ -445,7 +453,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
     })
   }
 
-	setInterval(getPageData, 15*1000);
+	$scope.intervalId = setInterval(getPageData, 15*1000);
 
 
 
