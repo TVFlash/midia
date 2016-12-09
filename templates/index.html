@@ -48,7 +48,7 @@
 			 --><div class="col-xs-4 col-sm-4" align="right" >
 					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===false" ng-click="loginFunc()" id="login" style="border:1px solid white;">Log in</button>
 					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===true" ng-click="logoutFunc()" id="logout" style="border:1px solid white;">Log out</button>
-					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===true" data-toggle="modal" data-target=".bs-example-modal-lg" style="border:1px solid white;">Settings</button>
+					<button type="button" class="btn btn-primary" ng-show="userLoggedIn===false" data-toggle="modal" data-target=".bs-example-modal-lg" style="border:1px solid white;">Settings</button>
 					<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" class="hide">
 					  <div class="modal-dialog modal-lg" role="document">
 					    <div class="modal-content" align="left">				    
@@ -56,7 +56,18 @@
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 						  				<div style="float: left">
-								  			<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<input id="togglefb" type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<script>
+											  $(function() {
+											    $('#togglefb').change(function() {
+											      if ($('#togglefb').prop('checked') == false) {
+											      	document.getElementById("btnfb").disabled = true;
+											      } else {
+											      	document.getElementById("btnfb").disabled = false;
+											      }
+											    })
+											  })
+											</script>
 								  			<img ng-src="../static/img/sideFB.jpg" alt="fbLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 15px">
@@ -64,7 +75,7 @@
 	                						<label>Priority (1-3)</label>						                	
 						                </div>
 						                <div style="float: left; margin-left: 10px; margin-top: 15px">
-						                	<button type="button" class="btn btn-default" id="priorityfb" ng-click="addfb()"><span class="glyphicon glyphicon-plus"></span></button>
+						                	<button id="btnfb" type="button" class="btn btn-default" id="priorityfb" ng-click="addfb()"><span class="glyphicon glyphicon-plus"></span></button>
 						                	
 						                </div>
 						            </div>						  		
@@ -72,7 +83,20 @@
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 						  				<div style="float: left">
-								  			<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<input id="toggletweet" type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<script>
+											  $(function() {
+											    $('#toggletweet').change(function() {
+											      if ($('#toggletweet').prop('checked') == false) {
+											      	document.getElementById("btntweet").disabled = true;
+											      	document.getElementById("usernametweet").disabled = true;
+											      } else {
+											      	document.getElementById("btntweet").disabled = false;
+											      	document.getElementById("usernametweet").disabled = false;
+											      }
+											    })
+											  })
+											</script>
 								  			<img ng-src="../static/img/TwitterLogo.png" alt="twitterLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
@@ -83,14 +107,27 @@
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
 	                						<input type="text" id="usernametweet" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<button type="button" class="btn btn-default" id="prioritytweet" ng-click="addtweet()"><span class="glyphicon glyphicon-plus"></span></button>
+						                	<button id="btntweet" type="button" class="btn btn-default" id="prioritytweet" ng-click="addtweet()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 						  				<div style="float: left">
-								  			<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<input id="toggletwitch" type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<script>
+											  $(function() {
+											    $('#toggletwitch').change(function() {
+											      if ($('#toggletwitch').prop('checked') == false) {
+											      	document.getElementById("btntwitch").disabled = true;
+											      	document.getElementById("usernametwitch").disabled = true;
+											      } else {
+											      	document.getElementById("btntwitch").disabled = false;
+											      	document.getElementById("usernametwitch").disabled = false;
+											      }
+											    })
+											  })
+											</script>
 								  			<img ng-src="../static/img/twitchIcon.png" alt="twitchLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
@@ -101,14 +138,27 @@
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
 	                						<input type="text" id="usernametwitch" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<button type="button" class="btn btn-default" id="prioritytwitch" ng-click="addtwitch()"><span class="glyphicon glyphicon-plus"></span></button>
+						                	<button id="btntwitch" type="button" class="btn btn-default" id="prioritytwitch" ng-click="addtwitch()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 						  				<div style="float: left">
-								  			<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<input id="togglegh" type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<script>
+											  $(function() {
+											    $('#togglegh').change(function() {
+											      if ($('#togglegh').prop('checked') == false) {
+											      	document.getElementById("btngh").disabled = true;
+											      	document.getElementById("usernamegh").disabled = true;
+											      } else {
+											      	document.getElementById("btngh").disabled = false;
+											      	document.getElementById("usernamegh").disabled = false;
+											      }
+											    })
+											  })
+											</script>
 								  			<img ng-src="../static/img/githubIcon.png" alt="gitHubLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
@@ -119,14 +169,27 @@
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
 	                						<input type="text" id="usernamegh" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<button type="button" class="btn btn-default" id="prioritygh" ng-click="addgh()"><span class="glyphicon glyphicon-plus"></span></button>
+						                	<button id="btngh" type="button" class="btn btn-default" id="prioritygh" ng-click="addgh()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 						  				<div style="float: left">
-								  			<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<input id="togglehn" type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<script>
+											  $(function() {
+											    $('#togglehn').change(function() {
+											      if ($('#togglehn').prop('checked') == false) {
+											      	document.getElementById("btnhn").disabled = true;
+											      	document.getElementById("usernamehn").disabled = true;
+											      } else {
+											      	document.getElementById("btnhn").disabled = false;
+											      	document.getElementById("usernamehn").disabled = false;
+											      }
+											    })
+											  })
+											</script>
 								  			<img ng-src="../static/img/HackerNewsLogo.png" alt="hackerNewsLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
@@ -137,14 +200,27 @@
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
 	                						<input type="text" id="usernamehn" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<button type="button" class="btn btn-default" id="priorityhn" ng-click="addhn()"><span class="glyphicon glyphicon-plus"></span></button>
+						                	<button id="btnhn" type="button" class="btn btn-default" id="priorityhn" ng-click="addhn()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 						  				<div style="float: left">
-								  			<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<input id="togglexkcd" type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<script>
+											  $(function() {
+											    $('#togglexkcd').change(function() {
+											      if ($('#togglexkcd').prop('checked') == false) {
+											      	document.getElementById("btnxkcd").disabled = true;
+											      	document.getElementById("usernamexkcd").disabled = true;
+											      } else {
+											      	document.getElementById("btnxkcd").disabled = false;
+											      	document.getElementById("usernamexkcd").disabled = false;
+											      }
+											    })
+											  })
+											</script>
 								  			<img ng-src="../static/img/xkcdLogo.png" alt="xkcdLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
@@ -155,14 +231,27 @@
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
 	                						<input type="text" id="usernamexkcd" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<button type="button" class="btn btn-default" id="priorityxkcd" ng-click="addxkcd()"><span class="glyphicon glyphicon-plus"></span></button>
+						                	<button id="btnxkcd" type="button" class="btn btn-default" id="priorityxkcd" ng-click="addxkcd()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>
 						  		<li class="list-group-item">
 						  			<div class="row" style="margin-left: 5px">
 						  				<div style="float: left">
-								  			<input type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<input id="togglereddit" type="checkbox" checked data-toggle="toggle" data-on="On" data-off="Off" data-onstyle="success" data-offstyle="danger" data-size="small">
+								  			<script>
+											  $(function() {
+											    $('#togglereddit').change(function() {
+											      if ($('#togglereddit').prop('checked') == false) {
+											      	document.getElementById("btnreddit").disabled = true;
+											      	document.getElementById("usernamereddit").disabled = true;
+											      } else {
+											      	document.getElementById("btnreddit").disabled = false;
+											      	document.getElementById("usernamereddit").disabled = false;
+											      }
+											    })
+											  })
+											</script>
 								  			<img ng-src="../static/img/redditIcon.png" alt="redditLogo" class="image-responsive" style="width: 35px; height: 35px; margin: 10px"/>
 								  		</div>
 								  		<div style="float: left; margin-left: 15px; margin-top: 5px">
@@ -173,7 +262,7 @@
 						                <div style="float: left; margin-left: 10px; margin-top: 3px">
 	                						<input type="text" id="usernamereddit" style="width: 120px">
 	                						<div style="height: 2px"></div>
-						                	<button type="button" class="btn btn-default" id="priorityreddit" ng-click="addreddit()"><span class="glyphicon glyphicon-plus"></span></button>
+						                	<button id="btnreddit" type="button" class="btn btn-default" id="priorityreddit" ng-click="addreddit()"><span class="glyphicon glyphicon-plus"></span></button>
 						                </div>
 						            </div>						  		
 						  		</li>

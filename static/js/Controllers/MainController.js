@@ -140,20 +140,20 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 
 	$scope.saveFunc = function() {
 		// check all textboxes
-		if ($('#priorityfb').val().length > 0) {
-			var pack = {
-				priority: $('#priorityfb').val()
-			}
-			$.ajax({
-		      type: "POST", 
-		      url: "/api/update/" + $scope.accountOne.id + "/facebook/" + $scope.accountOne.name,
-		      data: JSON.stringify(pack),
-		      contentType: "application/json"
-		    }).done(function(data){
-		        console.log("[Request sent]");
-		    })
-			// make request here
-		}
+		// if ($('#priorityfb').val().length > 0) {
+		// 	var pack = {
+		// 		priority: $('#priorityfb').val()
+		// 	}
+		// 	$.ajax({
+		//       type: "POST", 
+		//       url: "/api/update/" + $scope.accountOne.id + "/facebook/" + $scope.accountOne.name,
+		//       data: JSON.stringify(pack),
+		//       contentType: "application/json"
+		//     }).done(function(data){
+		//         console.log("[Request sent]");
+		//     })
+		// 	// make request here
+		// }
 		if ($('#usernametweet').val().length > 0) {
 			var pack = {
 				username: $('#usernametweet').val()
@@ -239,6 +239,7 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
 		        console.log("[Request sent]");
 		    })
 		}
+		console.log($('#togglefb').prop('checked'));
 	};
 
 	$scope.addfb = function() {
@@ -447,6 +448,31 @@ app.controller('MainController', ['$scope', '$window', function($scope, $window)
     }).done(function(data){
         console.log("[Request sent for refresh]");
         $scope.posts = $scope.posts.concat($.parseJSON(data));
+
+        for (i = 0; i < $scope.posts.length; i++) {
+        	if ($('#togglefb').prop('checked') == false && #scope.posts[i].type == 'facebook') {
+        		delete $scope.posts[i];
+        	}
+        	if ($('#toggletweet').prop('checked') == false && #scope.posts[i].type == 'twitter') {
+        		delete $scope.posts[i];
+        	}
+        	if ($('#toggletwitch').prop('checked') == false && #scope.posts[i].type == 'twitch') {
+        		delete $scope.posts[i];
+        	}
+        	if ($('#togglegh').prop('checked') == false && #scope.posts[i].type == 'github') {
+        		delete $scope.posts[i];
+        	}
+        	if ($('#togglehn').prop('checked') == false && #scope.posts[i].type == 'hackernews') {
+        		delete $scope.posts[i];
+        	}
+        	if ($('#togglexkcd').prop('checked') == false && #scope.posts[i].type == 'xkcd') {
+        		delete $scope.posts[i];
+        	}
+        	if ($('#togglereddit').prop('checked') == false && #scope.posts[i].type == 'reddit') {
+        		delete $scope.posts[i];
+        	}
+        }
+
         console.log($scope.posts);
         $scope.displayLoadingGIF = false;
         $scope.$apply();
