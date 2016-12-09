@@ -7,6 +7,10 @@ app.directive('post', function(){
     template: '<ng-include src="getTemplateUrl()"/>',
     controller: function($scope) {
       //function used on the ng-include to resolve the template
+  $scope.getPicture = function(){
+    return $scope.$parent.pictureURL;
+  } 
+
   $scope.CallAdd = function(){
         if ($scope.postInfo.type == "facebook")
           return $scope.$parent.addfb();
